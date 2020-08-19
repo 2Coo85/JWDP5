@@ -1,0 +1,22 @@
+html, body{
+    margin: 0;
+    width: 100%;
+}
+
+body{
+    background-color: #EC407A;
+    font-family: 'Roboto', sans-serif;
+}
+
+.mainContainer{
+    margin: 5% 8%;
+    display: block;
+}
+
+
+.main-content{
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}

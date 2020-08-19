@@ -1,0 +1,131 @@
+html, body {
+  margin: 0;
+  width: 100%;
+}
+
+body {
+  background-color: #EC407A;
+  font-family: "Roboto", sans-serif;
+}
+
+.mainContainer {
+  margin: 5% 8%;
+  display: block;
+}
+
+.main-content {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.cart-button {
+  width: 60%;
+  height: 50px;
+  border-radius: 25%;
+  margin-top: 5px;
+  text-transform: uppercase;
+  background-color: #C8E6C9;
+  border: 5px double #66BB6A;
+  text-shadow: 1px 0px black;
+}
+
+.page-header {
+  font-size: 1em;
+  width: 100%;
+  margin-bottom: 6%;
+  margin-top: 8%;
+}
+
+.title-header {
+  text-align: center;
+  font-size: 2.5em;
+  font-family: "calligraffitti", cursive;
+}
+
+.title-header img {
+  width: 80px;
+}
+
+h4 {
+  margin-top: 6px;
+  margin-bottom: 5px;
+}
+
+h5 {
+  margin-top: 5px;
+  margin-bottom: 6px;
+  font-size: 1em;
+}
+
+.nav {
+  font-size: 1.25em;
+  background-color: #66BB6A;
+  margin-top: 6%;
+  border-radius: 25%;
+  border: 3px double #fff;
+}
+
+.nav ul {
+  list-style-type: none;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #000;
+}
+
+.products {
+  display: flex;
+  flex-flow: column-reverse;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  box-shadow: -10px 10px 30px #FCE4EC;
+  text-align: center;
+  background-image: url(images/cotton-bkgd.jpg);
+  background-color: #66BB6A;
+  background-blend-mode: overlay;
+  margin: auto;
+  flex: 2 2 150px;
+  margin-bottom: 50px;
+  margin-right: 50px;
+  color: #000;
+  border-radius: 25%;
+  border: 3px double #66BB6A;
+}
+
+.products img {
+  margin-bottom: 15px;
+  height: 120px;
+  width: 150px;
+  border-radius: 25%;
+}
+
+.main-content {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+
+h3, p {
+  width: 100%;
+  text-align: center;
+}
+
+.main-content {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+#shopping-cart {
+  float: right;
+}
+
+/*# sourceMappingURL=style.css.map */

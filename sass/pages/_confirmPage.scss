@@ -1,0 +1,11 @@
+.main-content{
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+}
+
+h3, p{
+    width: 100%;
+    text-align: center
+}
