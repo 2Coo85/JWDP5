@@ -1,10 +1,11 @@
 html, body {
   margin: 0;
   width: 100%;
+  color: #492817;
 }
 
 body {
-  background-color: #EC407A;
+  background-color: #fdb7ae;
   font-family: "Roboto", sans-serif;
 }
 
@@ -26,9 +27,10 @@ body {
   border-radius: 25%;
   margin-top: 5px;
   text-transform: uppercase;
-  background-color: #C8E6C9;
-  border: 5px double #66BB6A;
-  text-shadow: 1px 0px black;
+  background-color: #741a02;
+  border: 2px dashed #fdb7ae;
+  text-shadow: 1px 0px #f46e6b;
+  color: #fdb7ae;
 }
 
 .page-header {
@@ -38,14 +40,33 @@ body {
   margin-top: 8%;
 }
 
+.page-header h2 {
+  float: left;
+  width: 50%;
+}
+
+.page-header h3 {
+  float: right;
+  width: 50%;
+}
+
 .title-header {
   text-align: center;
-  font-size: 2.5em;
   font-family: "calligraffitti", cursive;
+  background-color: #741a02;
+  color: #fdb7ae;
+}
+
+.title-header h1 {
+  font-size: 2.5em;
+  padding-top: 8px;
 }
 
 .title-header img {
-  width: 80px;
+  width: 50px;
+  float: left;
+  margin-left: 14%;
+  margin-right: -25%;
 }
 
 h4 {
@@ -61,10 +82,10 @@ h5 {
 
 .nav {
   font-size: 1.25em;
-  background-color: #66BB6A;
+  background-color: #f46e6b;
   margin-top: 6%;
   border-radius: 25%;
-  border: 3px double #fff;
+  border: 3px double #915b39;
 }
 
 .nav ul {
@@ -75,7 +96,7 @@ h5 {
 
 .nav a {
   text-decoration: none;
-  color: #000;
+  color: black;
 }
 
 .products {
@@ -84,25 +105,25 @@ h5 {
   justify-content: center;
   align-items: center;
   margin-top: 15px;
-  box-shadow: -10px 10px 30px #FCE4EC;
+  box-shadow: 0px 10px 10px #f46e6b;
   text-align: center;
-  background-image: url(images/cotton-bkgd.jpg);
-  background-color: #66BB6A;
-  background-blend-mode: overlay;
+  background-color: #915b39;
+  padding: 3px;
   margin: auto;
   flex: 2 2 150px;
   margin-bottom: 50px;
   margin-right: 50px;
-  color: #000;
+  color: #fff9f9;
   border-radius: 25%;
-  border: 3px double #66BB6A;
+  border: 5px outset #741a02;
 }
 
 .products img {
   margin-bottom: 15px;
   height: 120px;
-  width: 150px;
+  width: 140px;
   border-radius: 25%;
+  border: 5px solid #741a02;
 }
 
 .main-content {

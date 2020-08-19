@@ -1,9 +1,9 @@
 .nav{
     font-size: 1.25em;
-    background-color: #66BB6A;
+    background-color: $drkPink;
     margin-top: 6%;
     border-radius: 25%;
-    border: 3px double #fff;
+    border: 3px double $brown;
 }
 
 .nav ul{
@@ -14,6 +14,5 @@
 
 .nav a{
     text-decoration: none;
-    color: #000;
-    
+    color: darken($drkBrown, 30);
 }

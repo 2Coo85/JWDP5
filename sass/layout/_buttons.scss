@@ -4,7 +4,8 @@
     border-radius: 25%;
     margin-top: 5px;
     text-transform: uppercase;
-    background-color: #C8E6C9;
-    border: 5px double #66BB6A;
-    text-shadow: 1px 0px black;
+    background-color: $headerBkgd;
+    border: 2px dashed $lgtpink;
+    text-shadow: 1px 0px $drkPink;
+    color: $lgtpink;
 }

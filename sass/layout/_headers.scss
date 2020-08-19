@@ -2,17 +2,35 @@
     font-size: 1em;
     width: 100%;
     margin-bottom: 6%;
-    margin-top: 8%
+    margin-top: 8%;
+}
+.page-header h2{
+    float: left;
+    width: 50%;
+}
+
+.page-header h3{
+    float: right;
+    width: 50%;
 }
 
 .title-header{
     text-align: center;
-    font-size: 2.5em;
     font-family: "calligraffitti", cursive;
+    background-color: $headerBkgd;
+    color: $lgtpink;
+}
+
+.title-header h1{
+    font-size: 2.5em;
+    padding-top: 8px
 }
 
 .title-header img{
-    width: 80px;
+    width: 50px;
+    float: left;
+    margin-left: 14%;
+    margin-right: -25%;
 }
 
 h4{
