@@ -5,7 +5,7 @@ html, body{
 }
 
 body{
-    background-color: $lgtpink;
+    background-color: lighten($lgtpink, 20);    
     font-family: 'Roboto', sans-serif;
 }
 
