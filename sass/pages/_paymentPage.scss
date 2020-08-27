@@ -1,0 +1,13 @@
+td{
+    column-count: 2;
+}
+
+td:first-child{
+    column-count: 6;
+}
+
+thead{
+    color: $drkPink;
+    background-color: $drkBrown;
+    text-align: center;
+}

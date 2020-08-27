@@ -3,7 +3,7 @@
     <head>
         <meta content="Create your customized vintage teddy bear today.">
         <meta charset="utf-8">
-        <title>Handmade Teddy Bears >> Shopping Cart</title>
+        <title>Handmade Teddy Bears >> Confirmation</title>
         
         <link href="./css/style.css" rel="stylesheet">
         <style>
@@ -14,41 +14,34 @@
         <script src="models/Teddy.js"></script>
         <script src="routes/teddy.js"></script>
     </head>
-    <body>
+    <body onload="displaySingleItem()">
         <div class="mainContainer">
             <header class="title-header">
-                <img src="images/teddy-bear.png" alt="cartoon image of teddy bear">
-                <h1>Handmade Teddy Bears</h1>
+                <img src="images/teddy-bear.png" alt="cartoon image of teddy bear"><h1>Handmade Teddy Bears</h1>
             </header>
             <nav class="nav">
                 <ul>
                     <li><a href="index.html">Home >> </a></li>
-                    <li><a href="cart.php"> Cart</a></li>
+                    <li><a href="singleItem.html"> Teddy Bear</a></li>
                 </ul>
             </nav>
             <main>
                 <header class="page-header">
-                    <h1>Shopping Cart</h1>
+                    <h1>Teddy Bear:<span class="teddyBearName"></span></h1>
                 </header>
                 <div class="main-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <td colspan="3">Item</td>
-                                <td>Quantity</td>
-                                <td>Item $</td>
-                                <td>Total $</td>
-                            </tr>
-                        </thead>
-                        <tr>
-                            <td name="item-name"></td>
-                            <td name="item-qty"></td>
-                            <td name="item-price"></td>
-                            <td name="item-total"></td>
-                        </tr>
-                    </table>
+                    <div class="col-6">
+                        <img src""><p id=teddyBearDescription></p>
+                    </div>
+                    <div class="col-6">
+                        <h3 class="teddyBearName"></h3>
+                        <p id="teddyBearPrice"></p>
+                        <select id="teddyBearColors"></select>
+                        <button type="submit" class="cart-button">Add to Cart</button>
+                    </div>
                 </div>
             </main>
         </div>
+        <script src="js/script.js"></script>
     </body>
 </html>

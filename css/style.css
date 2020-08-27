@@ -149,4 +149,18 @@ h3, p {
   float: right;
 }
 
+td {
+  column-count: 2;
+}
+
+td:first-child {
+  column-count: 6;
+}
+
+thead {
+  color: #f46e6b;
+  background-color: #492817;
+  text-align: center;
+}
+
 /*# sourceMappingURL=style.css.map */
