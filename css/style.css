@@ -126,6 +126,11 @@ h5 {
   border: 5px solid #741a02;
 }
 
+.products a {
+  text-decoration: none;
+  color: #f46e6b;
+}
+
 .main-content {
   width: 100%;
   display: flex;
@@ -147,6 +152,15 @@ h3, p {
 
 #shopping-cart {
   float: right;
+}
+
+#singleProduct-display {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 td {

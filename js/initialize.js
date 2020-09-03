@@ -1,0 +1,1 @@
+var teddyDatabase = {model:{}, route:{}, controller:{} }; 
