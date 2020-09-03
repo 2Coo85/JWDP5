@@ -167,7 +167,7 @@ td {
   column-count: 2;
 }
 
-td:first-child {
+th:first-child, td:first-child {
   column-count: 6;
 }
 
