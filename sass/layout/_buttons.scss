@@ -1,11 +1,24 @@
 .cart-button{
-    width: 60%;
+    width: 100%;
     height: 50px;
     border-radius: 25%;
-    margin-top: 5px;
+    margin-top: 15px;
     text-transform: uppercase;
     background-color: $headerBkgd;
     border: 2px dashed $lgtpink;
     text-shadow: 1px 0px $drkPink;
     color: $lgtpink;
+}
+
+.deleteAllButton{
+    background-color: $headerBkgd;
+    border: 2px dashed $lgtpink;
+    text-shadow: 1px 0px $drkPink;
+    color: $lgtpink;
+    width: 100px;
+}
+
+.removeOne {
+    height: 35px;
+    width: 15px;
 }

@@ -1,4 +1,4 @@
- makeRequest = () => {
+makeRequest = () => {
     return new Promise((resolve, reject) => {
         let apiRequest = new XMLHttpRequest();
         apiRequest.open('GET', 'http://localhost:3000/api/teddies/');
@@ -11,7 +11,7 @@
                     reject('Server is unavailable');
                 }
             }
-        }
+        };
     });
 }
 
@@ -26,7 +26,6 @@ init = async () => {
     try {
         const requestPromise = makeRequest();
         const response = await requestPromise;
-        
         createProductBox(response);
     } catch (error) {
         document.querySelector('main-content').innerHTML = '<h2>' + error + '</h2>';

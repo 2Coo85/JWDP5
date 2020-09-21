@@ -6,6 +6,7 @@
         <title>Handmade Teddy Bears >> </title>
         
         <link href="./css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Calligraffitti&family=Roboto:ital@1&display=swap');
         </style>
@@ -22,12 +23,16 @@
                     <li><a href="singleItem.html"> Teddy Bear</a></li>
                 </ul>
             </nav>
-            <main>
-                <div class="main-content" id="singleProduct-display">
-                    
-                </div>
-            </main>
+            <div class="row">
+                <h3 id="shopping-cart"><a href="cart.html">Cart:</a><span id="numberOfCartItems"> 0</span></h3>
+                <main>
+                    <div class="main-content" id="productImage-display">    
+                    </div>
+                </main>
+                <aside id="productDetails"></aside>
+            </div>
         </div>
         <script src="js/callItems.js"></script>
+        <script src="js/createCart.js"></script>
     </body>
 </html>

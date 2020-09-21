@@ -1,8 +1,8 @@
-#singleProduct-display{
-    width: 100%;
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+main{
+    flex: 40%;
+    vertical-align: top;
+}
+
+#productDetails {
+    flex: 35%;
 }

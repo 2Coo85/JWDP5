@@ -7,7 +7,6 @@ makeRequest = () => {
         let apiRequest = new XMLHttpRequest();
         
         apiRequest.open('GET', 'http://localhost:3000/api/teddies/' + id);
-        apiRequest.send();
         apiRequest.onreadystatechange = () => {
             if (apiRequest.readyState === 4) {
                 if (apiRequest.status === 200) {
@@ -17,8 +16,11 @@ makeRequest = () => {
                 }
             }
         };
+        apiRequest.send();
     });
 };
+
+
 
 createProductBox = (response) => {
     //get DOM elements
@@ -33,18 +35,33 @@ createProductBox = (response) => {
     const dropDownLabel = document.createElement('label');
     const form = document.createElement('form');
     const addToCartBtn = document.createElement('button');
-    const productDisplay = document.getElementById('singleProduct-display');
+    const productDisplay = document.getElementById('productImage-display');
+    const detailDisplay = document.getElementById('productDetails');
+    const mainDiv = document.createElement('div');
+    const asideDiv = document.createElement('div');
+    const qtyDropDownLabel = document.createElement('label');
+    const qtyDropDown = document.createElement('select');
     
     productDisplay.appendChild(productBox);
     
+    mainDiv.classList.add('col-6');
+    mainDiv.style.textAlign = 'center';
+    productBox.appendChild(mainDiv);
+    
     image.setAttribute('src', teddyImg);
-    image.style.width = '300px';
+    image.classList.add('products');
+    image.style.width = '225px';
     image.style.marginTop = '20px';
-    productBox.appendChild(image);
+    mainDiv.appendChild(image);
+    mainDiv.innerHTML += '<p style="text-align: center">' + response.description + '</p>';
     
-    productBox.innerHTML += '<h3>' + response.name + '</h3>';
+    detailDisplay.appendChild(asideDiv);
+    asideDiv.classList.add('col-6');
+    asideDiv.style.marginTop = '20px';
+    asideDiv.innerHTML += '<h3>' + response.name + '</h3>';
     
-    dropDownLabel.innerHTML = "Choose your color:";
+    dropDownLabel.innerHTML = "Choose your color: ";
+    teddyColorsDropDown.setAttribute('id', 'colorSelection');
     form.appendChild(dropDownLabel);
     form.appendChild(teddyColorsDropDown);
     
@@ -54,15 +71,29 @@ createProductBox = (response) => {
         selections.setAttribute('value', response.colors[color]);
         teddyColorsDropDown.appendChild(selections);
     }
-    productBox.appendChild(form);
     
-    productBox.innerHTML += '<p>$' + response.price / 100 + '.00</p>';
-    productBox.innerHTML += '<p>' + response.description + '</p>';
+    asideDiv.innerHTML += '<h5>$' + response.price / 100 + '.00</h5>';
+    
+    asideDiv.appendChild(form);
     
     addToCartBtn.classList.add('cart-button');
+    addToCartBtn.setAttribute('id', 'addToCart');
+    addToCartBtn.setAttribute('data-product-id', response._id);
     addToCartBtn.innerHTML = 'Add To Cart';
     
-    productBox.appendChild(addToCartBtn);
+    asideDiv.appendChild(addToCartBtn);
+    
+    let items = JSON.parse(JSON.stringify(response));
+    
+    let cartBtn = document.querySelectorAll('.cart-button');
+    //click events
+    for (let i = 0; i < cartBtn.length; i++) {
+        cartBtn[i].addEventListener('click', () => {
+            updateCart(items);
+            getColor(items);
+            //getCount();
+        });
+    }
 };
 
 init = async () => {
@@ -72,8 +103,9 @@ init = async () => {
         
         createProductBox(response);
     } catch (error) {
-        document.getElementById('singleProduct-display').innerHTML = '<h2>' + error + '</h2>';
+        document.getElementById('cart-display').innerHTML = '<h2>' + error + '</h2>';
     }
 };
 
 init();
+displayCart();
