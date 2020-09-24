@@ -100,7 +100,6 @@ const cartTotal = (items) => {
     
     for (const [key, item] of Object.entries(inCart)) {
         let subtotal = document.getElementById('subtotal' + item.name);
-        let qtyInputs = document.getElementById('qtyInput' + item.name)
         let inCart = localStorage.getItem('inCart');
         inCart = JSON.parse(inCart);
         let subTotal = {};
@@ -122,27 +121,68 @@ const cartTotal = (items) => {
     }
 }
 
-const updateCalculation = () => {
+const calculate = () => {
     let inCart = localStorage.getItem('inCart');
-        inCart = JSON.parse(inCart);
-    for (const [key, item] of Object.entries(inCart)) {
-        let total = 0;
-        let qtyInputs = document.querySelectorAll('input.quantity');
-        let itemTotals = localStorage.getItem('itemTotals');
-        itemTotals = parseInt(itemTotals);
-        let productQty = localStorage.getItem('updateCart');
-        productQty = parseInt(productQty);
-        
-        
-        for (let i in qtyInputs){
-            productQty = qtyInputs[i].value;
-            
-            itemTotals = qtyInputs[i].value * inCart[item.name].price / 100;
-            break;
+    inCart = JSON.parse(inCart);
+    let productQty = localStorage.getItem('updateCart');
+    productQty = parseInt(productQty);
+    let cartDisplay = document.getElementById('numberOfCartItems');
+    let itemTotals = localStorage.getItem('itemTotals');
+    itemTotals = parseInt(itemTotals);
+    let grandTotal = document.getElementById('total');
+    let total = itemTotals;
+    let input = 0;
+    let totalQty = 0;
+    let subTotal = 0;
+    let newSubtotal = 0;
+    
+    let qtyInputs = document.querySelectorAll('input.quantity');
+    let initialSubtotals = document.querySelectorAll('.subtotals');
+    let quantities = Object.values(inCart);
+    
+    console.log(quantities);
+    for (let i = 0; i < qtyInputs.length; i++) {
+        totalQty += parseInt(qtyInputs[i].value);
+        if (quantities[i].quantity < qtyInputs[i].value || quantities[i].quantity > qtyInputs[i].value){
+            input = qtyInputs[i].value * quantities[i].price / 100;
+            subTotal += input;
+            initialSubtotals[i].textContent = '$' + input;
+            //total += subTotal - (quantities[i].quantity * quantities[i].price / 100);
+            console.log(subTotal);
+            console.log(input);
         }
-            productQty = localStorage.setItem('updateCart', productQty);
+        //initialSubtotals[i].textContent = '$' + subTotal;
+        //totalQty += quantities[i].quantity;
+        console.log(totalQty);
+        console.log(quantities[i].quantity);
+        console.log(qtyInputs[i].value);
+        grandTotal.textContent = '$' + subTotal;
+        localStorage.setItem('itemTotals', subTotal);
+    }
+    //total += subTotal //- (quantities[i].quantity * quantities[i].price / 100);
+    //console.log(total);
+    
+    let i = 0;
+    if (qtyInputs[i].value > inCart.quantity) {
+        productQty -= 1;
+        cartDisplay -= 1;
+    } else {
+        productQty += 1;
+        cartDisplay += 1;
     }
     
+    productQty = localStorage.setItem('updateCart', productQty);
+    itemTotals = localStorage.setItem('itemTotals', itemTotals);
+    
+}
+
+const calculateNewTotal = () => {
+    let grandTotal = document.getElementById('total');
+    let subTotals = document.querySelectorAll('subtotals');
+    let cartDisplay = document.getElementById('numberOfCartItems');
+    let qtyInputs = document.querySelectorAll('input.quantity');
+    let inCart = localStorage.getItem('inCart');
+    inCart = JSON.parse(inCart);
 }
 
 
@@ -179,7 +219,7 @@ let displayCart = (items) => {
     if (inCart && cartContainer) {
         cartContainer.innerHTML = '';
         Object.values(inCart).map(item => {
-            cartContainer.innerHTML += "<div class='product-items'><button type='button' class='removeOne btn btn-danger' onclick='removeItem()'>X</button><img src='" + item.image + "'><span>" + item.name + "</span></div><div class='price'>$" + item.price/100 + ".00</div><div class='quantity'><input type='number' id='qtyInput " + item.name + "' value='" + item.quantity + "' class='quantity' min='1' onchange='updateCalculation()'></div><div class='total' id='subtotal " + item.name +"'>$" + item.quantity * item.price/100; 
+            cartContainer.innerHTML += "<div class='product-items'><button type='button' class='removeOne btn btn-danger' onclick='removeItem()'>X</button><img src='" + item.image + "'><span>" + item.name + "</span></div><div class='price'>$" + item.price/100 + ".00</div><div id='inputs' class='quantity'><input type='number' id='qtyInput " + item.name + "' value='" + item.quantity + "' class='quantity' min='1' onchange='calculate()'></div><div class='total subtotals' id='subtotal " + item.name +"'>$" + item.quantity * item.price/100; 
         });
         
         cartContainer.innerHTML += `

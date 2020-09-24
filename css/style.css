@@ -183,7 +183,7 @@ main {
 }
 
 #cart-container {
-  width: 600px;
+  width: 900px;
   max-width: 95%;
   display: flex;
   flex-flow: column wrap;
@@ -193,7 +193,7 @@ main {
 }
 
 #cart-header {
-  width: 600px;
+  width: 900px;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
@@ -203,7 +203,7 @@ main {
 }
 
 .items {
-  width: 600px;
+  width: 900px;
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -263,7 +263,7 @@ main {
 }
 
 #customer-info {
-  width: 600px;
+  width: 900px;
   display: flex;
   flex-flow: column wrap;
   margin: 0 auto;
