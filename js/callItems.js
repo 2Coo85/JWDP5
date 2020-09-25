@@ -91,7 +91,6 @@ createProductBox = (response) => {
         cartBtn[i].addEventListener('click', () => {
             updateCart(items);
             getColor(items);
-            //getCount();
         });
     }
 };

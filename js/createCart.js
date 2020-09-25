@@ -143,27 +143,19 @@ const calculate = () => {
     console.log(quantities);
     for (let i = 0; i < qtyInputs.length; i++) {
         totalQty += parseInt(qtyInputs[i].value);
-        if (quantities[i].quantity < qtyInputs[i].value || quantities[i].quantity > qtyInputs[i].value){
+        if (quantities[i].quantity <= qtyInputs[i].value || quantities[i].quantity >= qtyInputs[i].value){
             input = qtyInputs[i].value * quantities[i].price / 100;
             subTotal += input;
             initialSubtotals[i].textContent = '$' + input;
-            //total += subTotal - (quantities[i].quantity * quantities[i].price / 100);
-            console.log(subTotal);
-            console.log(input);
         }
-        //initialSubtotals[i].textContent = '$' + subTotal;
-        //totalQty += quantities[i].quantity;
-        console.log(totalQty);
-        console.log(quantities[i].quantity);
-        console.log(qtyInputs[i].value);
         grandTotal.textContent = '$' + subTotal;
+        cartDisplay.textContent = totalQty;
+        productQty = totalQty;
+        localStorage.setItem('updateCart', productQty);
         localStorage.setItem('itemTotals', subTotal);
     }
-    //total += subTotal //- (quantities[i].quantity * quantities[i].price / 100);
-    //console.log(total);
-    
-    let i = 0;
-    if (qtyInputs[i].value > inCart.quantity) {
+    //let i = 0;
+    /*if (qtyInputs[i].value > inCart.quantity) {
         productQty -= 1;
         cartDisplay -= 1;
     } else {
@@ -171,30 +163,23 @@ const calculate = () => {
         cartDisplay += 1;
     }
     
-    productQty = localStorage.setItem('updateCart', productQty);
-    itemTotals = localStorage.setItem('itemTotals', itemTotals);
+    productQty = localStorage.setItem('updateCart', productQty);*/
     
 }
 
-const calculateNewTotal = () => {
-    let grandTotal = document.getElementById('total');
-    let subTotals = document.querySelectorAll('subtotals');
-    let cartDisplay = document.getElementById('numberOfCartItems');
-    let qtyInputs = document.querySelectorAll('input.quantity');
-    let inCart = localStorage.getItem('inCart');
-    inCart = JSON.parse(inCart);
-}
-
-
-/*let removeItem = (items) => {
-    let cartItems = localStorage.getItem('productsInCart');
-    cartItems = JSON.parse(cartItems);
-    if (cartItems) {
-        localStorage.removeItem(cartItems.name);
+let removeAll = (items) => {
+    let cartItems = localStorage.getItem('inCart');
+    let itemTotals = localStorage.getItem('itemTotals');
+    let productQty = localStorage.getItem('updateCart');
+    if (cartItems, itemTotals, productQty) {
+        localStorage.removeItem('inCart');
+        localStorage.removeItem('itemTotals');
+        localStorage.removeItem('updateCart');
+        localStorage.setItem('updateCart', 0);
     }
+    setUpItem(items);
     updateCart();
-}*/
-
+}
 //displaying the items in the cart
 let displayCart = (items) => {
     let inCart = localStorage.getItem('inCart');
@@ -219,11 +204,11 @@ let displayCart = (items) => {
     if (inCart && cartContainer) {
         cartContainer.innerHTML = '';
         Object.values(inCart).map(item => {
-            cartContainer.innerHTML += "<div class='product-items'><button type='button' class='removeOne btn btn-danger' onclick='removeItem()'>X</button><img src='" + item.image + "'><span>" + item.name + "</span></div><div class='price'>$" + item.price/100 + ".00</div><div id='inputs' class='quantity'><input type='number' id='qtyInput " + item.name + "' value='" + item.quantity + "' class='quantity' min='1' onchange='calculate()'></div><div class='total subtotals' id='subtotal " + item.name +"'>$" + item.quantity * item.price/100; 
+            cartContainer.innerHTML += "<div class='product-items'><button type='button' class='removeOne btn btn-danger' onclick='removeItem()'>X</button><img src='" + item.image + "'><span>" + item.name + "</span></div><div class='price'>$" + item.price/100 + ".00</div><div id='inputs' class='quantity'><input type='number' id='qtyInput " + item.name + "' value='" + item.quantity + "' class='quantity' min='1'></div><div class='total subtotals' id='subtotal " + item.name +"'>$" + item.quantity * item.price/100; 
         });
         
         cartContainer.innerHTML += `
-            <button type="button" id="update-total" onclick="calculateNewTotal()">Update Cart</button>
+            <button type="button" id="update-total" onclick="calculate()">Update Cart</button>
             <div class="basketTotalContainer">
                 <h4 class="basketTotalTitle">Basket Total</h4>
                 <h4 class="basketTotal" id="total">$${cartTotal}.00</h4>
@@ -236,54 +221,136 @@ loadCart();
 displayCart();
 
 //display customer form
+const createCustomerForm = (response) => {
+    //create and get DOM elements
+    const customerForm = document.getElementById('customer-info');
+    const firstNameLabel = document.createElement('label');
+    const firstName = document.createElement('input');
+    const lastNameLabel = document.createElement('label');
+    const lastName = document.createElement('input');
+    const addressLabel = document.createElement('label');
+    const address = document.createElement('input');
+    const cityLabel = document.createElement('label');
+    const city = document.createElement('input');
+    const emailLabel = document.createElement('label');
+    const email = document.createElement('input');
 
-//create and get DOM elements
-const customerForm = document.getElementById('customer-info');
-const firstNameLabel = document.createElement('label');
-const firstName = document.createElement('input');
-const lastNameLabel = document.createElement('label');
-const lastName = document.createElement('input');
-const addressLabel = document.createElement('label');
-const address = document.createElement('input');
-const cityLabel = document.createElement('label');
-const city = document.createElement('input');
-const emailLabel = document.createElement('label');
-const email = document.createElement('input');
+    //set attributes and innerHTML for elements
+    firstNameLabel.setAttribute('for', 'firstName');
+    firstNameLabel.innerHTML = "First Name";
+    firstName.setAttribute('type', 'text');
+    firstName.setAttribute('name', 'firstName');
+    firstName.setAttribute('id', 'firstName');
+    customerForm.appendChild(firstNameLabel);
+    customerForm.appendChild(firstName);
 
-//set attributes and innerHTML for elements
-firstNameLabel.setAttribute('for', 'firstName');
-firstNameLabel.innerHTML = "First Name";
-firstName.setAttribute('type', 'text');
-firstName.setAttribute('name', 'firstName');
-customerForm.appendChild(firstNameLabel);
-customerForm.appendChild(firstName);
+    lastNameLabel.setAttribute('for', 'lastName');
+    lastNameLabel.innerHTML = "Last Name";
+    lastName.setAttribute('type', 'text');
+    lastName.setAttribute('name', 'lastName');
+    lastName.setAttribute('id', 'lastName');
+    customerForm.appendChild(lastNameLabel);
+    customerForm.appendChild(lastName);
 
-lastNameLabel.setAttribute('for', 'lastName');
-lastNameLabel.innerHTML = "Last Name";
-lastName.setAttribute('type', 'text');
-lastName.setAttribute('name', 'lastName');
-customerForm.appendChild(lastNameLabel);
-customerForm.appendChild(lastName);
+    addressLabel.setAttribute('for', 'address');
+    addressLabel.innerHTML = "Address";
+    address.setAttribute('type', 'text');
+    address.setAttribute('name', 'address');
+    address.setAttribute('id', 'address');
+    customerForm.appendChild(addressLabel);
+    customerForm.appendChild(address);
 
-addressLabel.setAttribute('for', 'address');
-addressLabel.innerHTML = "Address";
-address.setAttribute('type', 'text');
-address.setAttribute('name', 'address');
-customerForm.appendChild(addressLabel);
-customerForm.appendChild(address);
+    cityLabel.setAttribute('for', 'city');
+    cityLabel.innerHTML = "City";
+    city.setAttribute('type', 'text');
+    city.setAttribute('name', 'city');
+    city.setAttribute('id', 'city');
+    customerForm.appendChild(cityLabel);
+    customerForm.appendChild(city);
 
-cityLabel.setAttribute('for', 'city');
-cityLabel.innerHTML = "City";
-city.setAttribute('type', 'text');
-city.setAttribute('name', 'city');
-customerForm.appendChild(cityLabel);
-customerForm.appendChild(city);
+    emailLabel.setAttribute('for', 'email');
+    emailLabel.innerHTML = "Email";
+    email.setAttribute('type', 'email');
+    email.setAttribute('name', 'email');
+    email.setAttribute('id', 'email');
+    customerForm.appendChild(emailLabel);
+    customerForm.appendChild(email);
 
-emailLabel.setAttribute('for', 'email');
-emailLabel.innerHTML = "Email";
-email.setAttribute('type', 'email');
-email.setAttribute('name', 'email');
-customerForm.appendChild(emailLabel);
-customerForm.appendChild(email);
+    //validation for input elements
+    let customerInputs = document.querySelectorAll('#customer-info.input');    
 
-//validation for input elements
+    let customerFirstName = document.getElementById('firstName');
+    let customerLastName = document.getElementById('lastName');
+    let customerAddress = document.getElementById('address');
+    let customerCity = document.getElementById('city');
+    let customerEmail = document.getElementById('email');
+
+    console.log(customerFirstName.textContent);
+    customerFirstName.addEventListener('blur', () => {
+    
+        if (!customerFirstName.textContent){
+            customerFirstName.style.border = 'thick red solid';
+            customerFirstName.style.backgroundColor = 'red';
+        } else {
+            customerFirstName.style.border = "thick green solid";
+            customerFirstName.style.backgroundColor = 'white';
+        }
+    });
+    
+    customerLastName.addEventListener('blur', () => {
+    
+        if (!customerLastName.textContent){
+            customerLastName.style.border = "thick red solid";
+            customerLastName.style.backgroundColor = 'red';
+        } else {
+            customerLastName.style.border = "thick green solid";
+            customerLastName.style.backgroundColor = 'white';
+        }
+    });
+    customerAddress.addEventListener('blur', () => {
+    
+        if (!customerAddress.textContent){
+            customerAddress.style.border = "thick red solid";
+            customerAddress.style.backgroundColor = 'red';
+        } else {
+            customerAddress.style.border = "thick green solid";
+            customerAddress.style.backgroundColor = 'white';
+        }
+    });
+    
+    customerCity.addEventListener('blur', () => {
+    
+        if (!customerCity.textContent){
+            customerCity.style.border = "thick red solid";
+            customerCity.style.backgroundColor = 'red';
+        } else {
+            customerCity.style.border = "thick green solid";
+            customerCity.style.backgroundColor = 'white';
+        }
+    });
+    
+    customerEmail.addEventListener('blur', () => {
+    
+        if (!customerEmail.textContent){
+            customerEmail.style.border = "thick red solid";
+            customerEmail.style.backgroundColor = 'red';
+        } else {
+            customerEmail.style.border = "thick green solid";
+            customerEmail.style.backgroundColor = 'white';
+        }
+    });
+
+}
+
+init = async () => {
+    try {
+        const requestPromise = makeRequest();
+        const response = await requestPromise;
+        
+        createCustomerForm(response);
+    } catch (error) {
+        document.getElementById('customer-info').innerHTML = '<h2>' + error + '</h2>';
+    }
+};
+
+init()
