@@ -1,8 +1,9 @@
 let apiRequest = new XMLHttpRequest();
-makeRequest = (verb, data) => {
+makeRequest = (verb, url, data) => {
     return new Promise((resolve, reject) => {
         let apiRequest = new XMLHttpRequest();
-        apiRequest.open('GET', 'http://localhost:3000/api/teddies/');
+        apiRequest.open(verb, url);
+        apiRequest.send();
         apiRequest.onreadystatechange = () => {
             if (apiRequest.readyState === 4) {
                 if(apiRequest.status === 200) {
@@ -12,17 +13,20 @@ makeRequest = (verb, data) => {
                 }
             }
         };
-        let order = {};
-        
-        if (verb === "POST") {
-            apiRequest.setRequestHeader('Content-Type', 'application/json');
-            apiRequest.open('POST', 'http://localhost:3000/api/teddies/' + order);
-            apiRequest.send(JSON.stringify(data));
-        } else {
-            apiRequest.send();
-        }
     });
 };
+
+init = async () => {
+    try {
+        const requestPromise = makeRequest('GET', 'http://localhost:3000/api/teddies/');
+        const response = await requestPromise;
+        
+        createCustomerForm(response);
+    } catch (error) {
+        document.getElementById('customer-info').innerHTML = '<h2>' + error + '</h2>';
+    }
+};
+
 
 let items = JSON.parse(JSON.stringify(apiRequest.response));
 
@@ -73,7 +77,6 @@ const getColor = (items) => {
     let colorSelected = document.getElementById('colorSelection');
     let resultingColor = colorSelected.value;
     let itemColor =  resultingColor;
-    console.log(itemColor);
     localStorage.setItem('color', itemColor);
 }
 
@@ -172,9 +175,7 @@ let removeAll = (items) => {
     let itemTotals = localStorage.getItem('itemTotals');
     let productQty = localStorage.getItem('updateCart');
     if (cartItems, itemTotals, productQty) {
-        localStorage.removeItem('inCart');
-        localStorage.removeItem('itemTotals');
-        localStorage.removeItem('updateCart');
+        localStorage.clear();
         localStorage.setItem('updateCart', 0);
     }
     setUpItem(items);
@@ -192,15 +193,6 @@ let displayCart = (items) => {
     let cartTotal = localStorage.getItem('itemTotals');
     cartTotal = JSON.parse(cartTotal);
     let qtyInputs = document.querySelectorAll('input.quantity');
-    
-    
-    let order = {
-        'productsInOrder': inCart,
-        'totalOrderCost': cartTotal
-    }
-    console.log(order);
-    
-    
     if (inCart && cartContainer) {
         cartContainer.innerHTML = '';
         Object.values(inCart).map(item => {
@@ -208,21 +200,18 @@ let displayCart = (items) => {
         });
         
         cartContainer.innerHTML += `
-            <button type="button" id="update-total" onclick="calculate()">Update Cart</button>
             <div class="basketTotalContainer">
+            <button type="button" id="update-total" onclick="calculate()" class="main-button">Update Cart</button>
                 <h4 class="basketTotalTitle">Basket Total</h4>
                 <h4 class="basketTotal" id="total">$${cartTotal}.00</h4>
             </div>
         `;
     }
 };
-cartTotal();
-loadCart();
-displayCart();
 
-//display customer form
 const createCustomerForm = (response) => {
     //create and get DOM elements
+    const mainDisplay = document.getElementById('cart-display');
     const customerForm = document.getElementById('customer-info');
     const firstNameLabel = document.createElement('label');
     const firstName = document.createElement('input');
@@ -234,13 +223,15 @@ const createCustomerForm = (response) => {
     const city = document.createElement('input');
     const emailLabel = document.createElement('label');
     const email = document.createElement('input');
-
+    
     //set attributes and innerHTML for elements
     firstNameLabel.setAttribute('for', 'firstName');
     firstNameLabel.innerHTML = "First Name";
     firstName.setAttribute('type', 'text');
     firstName.setAttribute('name', 'firstName');
     firstName.setAttribute('id', 'firstName');
+    firstName.setAttribute('required', 'required');
+    firstName.setAttribute('data-value-missing', 'Field is required');
     customerForm.appendChild(firstNameLabel);
     customerForm.appendChild(firstName);
 
@@ -249,6 +240,8 @@ const createCustomerForm = (response) => {
     lastName.setAttribute('type', 'text');
     lastName.setAttribute('name', 'lastName');
     lastName.setAttribute('id', 'lastName');
+    lastName.setAttribute('required', 'required');
+    lastName.setAttribute('data-value-missing', 'Field is required');
     customerForm.appendChild(lastNameLabel);
     customerForm.appendChild(lastName);
 
@@ -257,6 +250,8 @@ const createCustomerForm = (response) => {
     address.setAttribute('type', 'text');
     address.setAttribute('name', 'address');
     address.setAttribute('id', 'address');
+    address.setAttribute('required', 'required');
+    address.setAttribute('data-value-missing', 'Field is required');
     customerForm.appendChild(addressLabel);
     customerForm.appendChild(address);
 
@@ -265,6 +260,8 @@ const createCustomerForm = (response) => {
     city.setAttribute('type', 'text');
     city.setAttribute('name', 'city');
     city.setAttribute('id', 'city');
+    city.setAttribute('required', 'required');
+    city.setAttribute('data-value-missing', 'Field is required');
     customerForm.appendChild(cityLabel);
     customerForm.appendChild(city);
 
@@ -273,84 +270,179 @@ const createCustomerForm = (response) => {
     email.setAttribute('type', 'email');
     email.setAttribute('name', 'email');
     email.setAttribute('id', 'email');
+    email.setAttribute('required', 'required');
+    email.setAttribute('data-value-missing', 'Field is required');
     customerForm.appendChild(emailLabel);
     customerForm.appendChild(email);
 
     //validation for input elements
-    let customerInputs = document.querySelectorAll('#customer-info.input');    
-
-    let customerFirstName = document.getElementById('firstName');
-    let customerLastName = document.getElementById('lastName');
-    let customerAddress = document.getElementById('address');
-    let customerCity = document.getElementById('city');
-    let customerEmail = document.getElementById('email');
-
-    console.log(customerFirstName.textContent);
-    customerFirstName.addEventListener('blur', () => {
+    let isFormValid = customerForm.checkValidity();
+    let isFirstNameValid = false;
+    let isLastNameValid = false;
+    let isAddressValid = false;
+    let isCityValid = false;
+    let isEmailValid = false;
+    const regExName = /^[A-Za-z] {3,32}$/;
+    const regExAddress = /^[A-Za-z0-9 ]{7,32}$/;
+    const regExEmail = /^[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
     
-        if (!customerFirstName.textContent){
-            customerFirstName.style.border = 'thick red solid';
-            customerFirstName.style.backgroundColor = 'red';
-        } else {
-            customerFirstName.style.border = "thick green solid";
-            customerFirstName.style.backgroundColor = 'white';
+    if (firstName.value === ""){
+        firstName.style.backgroundColor = 'darkgray';
+        firstName.addEventListener('blur', () => {
+            if (!firstName.checkValidity() || regExName.test(firstName.value == false)) {
+                firstName.style.border = "thin red solid";
+                console.log("field is empty/entry invalid");
+            } else {
+                firstName.style.border = "thin green solid";
+                isFirstNameValid = true;
+                console.log("entry is valid");
+            }  
+        })
+        
+    };
+    if (lastName.value === ""){
+        lastName.style.backgroundColor = 'darkgray';
+        lastName.addEventListener('blur', () => {
+           if (!lastName.checkValidity() || regExName.test(lastName.value == false)) {
+                lastName.style.border = "thin red solid";
+                console.log("field is empty");
+            } else {
+                lastName.style.border = "thin green solid";
+                isLastNameValid = true;
+                console.log("entry is valid");
+            } 
+        })
+    };
+    if (address.value === '') {
+        address.style.backgroundColor = 'darkgray';
+        address.addEventListener('blur', () => {
+            if (!address.checkValidity() || regExAddress.test(address.value) == false) {
+                address.style.border = "thin red solid";
+                console.log("field is empty");
+            } else {
+                address.style.border = "thin green solid";
+                isAddressValid = true;
+                console.log("entry is valid");
+            }
+        })
+    };
+    if (city.value === "") {
+        city.style.backgroundColor = 'darkgray';
+        city.addEventListener('blur', () => {
+            if (!city.checkValidity() || regExName.test(city.value == false)) {
+                city.style.border = "thin red solid";
+                console.log("field is empty");
+            } else {
+                city.style.border = "thin green solid";
+                isCityValid = true;
+                console.log("entry is valid");
+            }
+        })
+    };
+    if (email.value === "") {
+        email.style.backgroundColor = 'darkgray';
+        email.addEventListener('input', () => {
+            if (!email.checkValidity() || regExEmail.test(email.value == false)) {
+               email.style.border = "thin red solid";
+                console.log("field is empty");
+            } else {
+                email.style.border = "thin green solid";
+                isEmailValid = true;
+                console.log("entry is valid");
+            }
+        })
+    }
+    
+    
+    let submitOrderBtn = document.getElementById('submit-order');
+    let inCart = localStorage.getItem('inCart');
+    inCart = JSON.parse(inCart);
+    submitOrderBtn.addEventListener('submit', ($event) => {
+        $event.preventDefault();
+        
+        let contactInfo = {
+            'fName': firstName.value,
+            'lName': lastName.value,
+            'custAddress': address.value,
+            'custCity': city.value,
+            'emailAddress': email.value
         }
-    });
-    
-    customerLastName.addEventListener('blur', () => {
-    
-        if (!customerLastName.textContent){
-            customerLastName.style.border = "thick red solid";
-            customerLastName.style.backgroundColor = 'red';
-        } else {
-            customerLastName.style.border = "thick green solid";
-            customerLastName.style.backgroundColor = 'white';
+        
+        const orderObject = {
+            'customerInformation': contactInfo,
+            'orderInformation': inCart
         }
+         localStorage.setItem('customerOrder', JSON.stringify(orderObject));
+        
+        if ((firstName.value !== "") && (lastName.value !== "") && (address.value !== '') && (city.value !== "") && (email.value !== "")) {
+            buildOrder(orderObject);   
+        } 
     });
-    customerAddress.addEventListener('blur', () => {
-    
-        if (!customerAddress.textContent){
-            customerAddress.style.border = "thick red solid";
-            customerAddress.style.backgroundColor = 'red';
-        } else {
-            customerAddress.style.border = "thick green solid";
-            customerAddress.style.backgroundColor = 'white';
-        }
-    });
-    
-    customerCity.addEventListener('blur', () => {
-    
-        if (!customerCity.textContent){
-            customerCity.style.border = "thick red solid";
-            customerCity.style.backgroundColor = 'red';
-        } else {
-            customerCity.style.border = "thick green solid";
-            customerCity.style.backgroundColor = 'white';
-        }
-    });
-    
-    customerEmail.addEventListener('blur', () => {
-    
-        if (!customerEmail.textContent){
-            customerEmail.style.border = "thick red solid";
-            customerEmail.style.backgroundColor = 'red';
-        } else {
-            customerEmail.style.border = "thick green solid";
-            customerEmail.style.backgroundColor = 'white';
-        }
-    });
-
 }
 
-init = async () => {
+
+const buildOrder = async (orderObject) => {
     try {
-        const requestPromise = makeRequest();
-        const response = await requestPromise;
+        const orderPromise = orderRequest(orderObject);
+        const orderResponse = await orderPromise;
+        return orderResponse;
         
-        createCustomerForm(response);
-    } catch (error) {
-        document.getElementById('customer-info').innerHTML = '<h2>' + error + '</h2>';
+        console.log(orderPromise, orderResponse, orderObject);
+
+        createOrderPage(orderResponse);
+    } catch (e) {
+         document.getElementById('cart-display').innerHTML = '<h2>' + e + '</h2>';
     }
-};
+}
+
+orderRequest = (verb, url, data) => {
+    if (!document.getElementById('cart-display')) {
+    return new Promise ((resolve, reject) => {
+        let customerOrder = localStorage.getItem('customerInfo');
+        customerOrder = JSON.parse(customerOrder);
+        let order = customerOrder;
+        const confirmUrl = new URL("confirm.html");
+        confirmUrl.searchParams.append(order);
+        let orderApiRequest = new XMLHttpRequest();
+        orderApiRequest.open('POST', 'http://localhost:3000/api/teddies/' + order);
+        orderApiRequest.setRequestHeader('Content-Type', 'application/json');
+        orderApiRequest.send(JSON.stringify(data));
+        orderApiRequest.onreadystatechange = () => {
+            if (orderApiRequest.readyState === 4) {
+                if (orderApiRequest.status === 200 || orderApiRequest.status === 201) {
+                    resolve(JSON.parse(orderApiRequest.response));
+                } else {
+                    reject(orderApiRequest.statusText);
+                }
+            }
+        }
+    })
+    }
+}
+
+const createOrderPage = (response) => {
+    //get DOM elements from confirmation page
+    let orderNumber = document.getElementById('order-number');
+    let orderCost = document.getElementById('order-cost');
+    let customerOrder = localStorage.getItem('customerOrder');
+    customerOrder = JSON.parse;
+    
+    const cartTotal = localStorage.getItem('itemTotals');
+    cartTotal = parseInt(cartTotal);
+    const customerOrderInfo = localStorage.getItem('customerInfo');
+    customerOrderInfo = JSON.parse(customerOrderInfo);
+    let confirmOrderPage = document.getElementById('confirmation');
+        
+    if (confirmOrderPage) {
+        sessionStorage.setItem('customerOrder', JSON.stringify(customerOrder));
+        console.log(customerOrder);
+        localStorage.clear();
+        orderNumber.textContent = 'Order# ' +  Math.floor(Math.random() * 100000000) + 1;
+        orderCost.textContent = "$" + cartTotal;
+    }
+}
+cartTotal();
+loadCart();
+displayCart();
 
 init()

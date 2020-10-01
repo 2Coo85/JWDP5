@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "sass": "sass --watch ./sass/mainStyle.scss:./css/style.css",
-    "start": "node server.js"
+    "start": "node server.js",
+    "type": "module"
   },
   "author": "tasya",
   "license": "ISC",

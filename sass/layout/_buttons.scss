@@ -20,5 +20,25 @@
 
 .removeOne {
     height: 35px;
-    width: 15px;
+    width: 35px;
+}
+
+.main-button {
+    background-color: $headerBkgd;
+    border: 3px solid $brown;
+    text-shadow: 1px 0px $drkPink;
+    color: $lgtpink;
+}
+
+.main-button:hover {
+    background-color: $lgtpink;
+    color: $drkBrown
+}
+
+.submitBtn {
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
 }

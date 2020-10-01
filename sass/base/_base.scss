@@ -21,3 +21,9 @@ body{
     flex-flow: row wrap;
     justify-content: space-around;
 }
+
+@media (max-width: 600px){
+    .mainContainer, .main-content form {
+        max-width: 550px;
+    }
+}

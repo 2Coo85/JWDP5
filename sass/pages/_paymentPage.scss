@@ -3,18 +3,17 @@
     flex-flow: column wrap;
 }
 
-#cart-container{
-    width: 900px;
-    max-width: 95%;
+/*#cart-container{
+    width: 100%;
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
     margin: 0 auto;
     margin-top: 50px;
-}
+}*/
 
 #cart-header{
-    width: 900px;
+    width: 97%;
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
@@ -24,34 +23,35 @@
 }
 
 .items{
-    width: 900px;
+    width: 100%;
     display: flex;
     flex-flow: row wrap;
     align-items: center;
 }
 
 .item-title{
-    width: 35%;
+    width: 32%;
     margin-left: 10px;
 }
 .price{
-    width: 15%;
+    width: 10.5%;
     align-items: center;
     text-align: center
 }
 .quantity{
-    width: 30%;
+    width: 32.75%;
     align-items: center;
     text-align: center
 }
 
 .total{
-    width: 10%;
+    width: 20.25%;
     align-items: center;
+    text-align: center
 }
 
 .product-items{
-    width: 45%;
+    width: 33.5%;
     display: flex;
     flex-flow: row wrap;
     justify-content: space-around;
@@ -69,12 +69,13 @@
 .basketTotalContainer{
     display: flex;
     justify-content: flex-end;
-    width: 100%;
+    width: 95%;
     padding: 10px 0;
 }
 
 .basketTotalTitle{
-    width: 30%;
+    width: 22%;
+    text-align: center;
 }
 
 .basketTotal{
@@ -82,11 +83,10 @@
 }
 
 #customer-info{
-    width: 900px;
+    width: 600px;
     display: flex;
     flex-flow: column wrap;
     margin: 0 auto;
-    margin-top: 30px;
     background-color: $lgtpink;
     border: 2.5px solid $brown;
     padding: 5px;
@@ -98,8 +98,8 @@
     font-size: 1.5em;
 }
 
-#qtyInput{
-    width: 25%;
-    justify-content: flex-start;
+input[type=number]{
+    width: 50%;
+    justify-content: flex-end;
     align-items: center;
 }
