@@ -431,7 +431,7 @@ orderRequest = (verb, url, data) => {
         customerOrder = JSON.parse(customerOrder);
         let orderApiRequest = new XMLHttpRequest();
         let url = 'confirm.html';
-        let order = 'customer' + customerOrder.customerInformation[1] + '&amp;=' + customerOrder.orderId;
+        let order = 'customer' + customerOrder;
         orderApiRequest.open("POST", url, data);
         orderApiRequest.setRequestHeader('Content-Type', 'application/json');
         orderApiRequest.send(order);
@@ -454,9 +454,9 @@ const createOrderPage = (response) => {
     let customerOrder = localStorage.getItem('customerOrder');
     customerOrder = JSON.parse;
     
-    const cartTotal = localStorage.getItem('itemTotals');
+    let cartTotal = localStorage.getItem('itemTotals');
     cartTotal = parseInt(cartTotal);
-    const customerOrderInfo = localStorage.getItem('customerInfo');
+    let customerOrderInfo = localStorage.getItem('customerInfo');
     customerOrderInfo = JSON.parse(customerOrderInfo);
     let confirmOrderPage = document.getElementById('confirmation');
         
@@ -472,5 +472,7 @@ const createOrderPage = (response) => {
 cartTotal();
 loadCart();
 displayCart();
+createOrderPage();
+orderRequest();
 
 init()
