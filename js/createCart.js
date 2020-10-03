@@ -426,14 +426,13 @@ const buildOrder = async (orderObject) => {
 }
 
 orderRequest = (verb, url, data) => {
-    if (!document.getElementById('cart-display')) {
     return new Promise ((resolve, reject) => {
         let customerOrder = localStorage.getItem('customerOrder');
         customerOrder = JSON.parse(customerOrder);
         let orderApiRequest = new XMLHttpRequest();
         let url = 'confirm.html';
         let order = 'customer' + customerOrder.customerInformation[1] + '&amp;=' + customerOrder.orderId;
-        orderApiRequest.open("POST", url);
+        orderApiRequest.open("POST", url, data);
         orderApiRequest.setRequestHeader('Content-Type', 'application/json');
         orderApiRequest.send(order);
         orderApiRequest.onreadystatechange = () => {
@@ -446,7 +445,6 @@ orderRequest = (verb, url, data) => {
             }
         }
     })
-    }
 }
 
 const createOrderPage = (response) => {
