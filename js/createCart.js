@@ -313,7 +313,7 @@ const createCustomerForm = (response) => {
             } 
         })
     };
-    if (address.value === '') {
+    if (address.value === "") {
         address.style.backgroundColor = 'darkgray';
         address.addEventListener('blur', () => {
             if (!address.checkValidity() || regExAddress.test(address.value) == false) {
@@ -370,19 +370,49 @@ const createCustomerForm = (response) => {
         
         const orderObject = {
             'customerInformation': contactInfo,
-            'orderInformation': inCart
+            'orderInformation': inCart,
+            'orderID': Math.round(Math.floor * 10000) + 1
         }
          localStorage.setItem('customerOrder', JSON.stringify(orderObject));
         
-        if ((firstName.value !== "") && (lastName.value !== "") && (address.value !== '') && (city.value !== "") && (email.value !== "")) {
+        if ((firstName.value !== "") && (lastName.value !== "") && (address.value !== "") && (city.value !== "") && (email.value !== "")) {
             buildOrder(orderObject);   
         } 
     });
 }
 
+/*let orderObject = localStorage.getItem('customerOrder');
+let xhr = new XMLHttpRequest();
+let url = 'http://localhost:3000/api/teddies/';
+let params = orderObject;
+xhr.open('GET', url + '?' + params);
+xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4 && xhr.status === 200){
+        console.log(xhr.responseText);
+    }
+}
+xhr.send();
+
+let order = 'order=1&name=LastName';
+let newUrl = url + order;
+xhr.open('POST', newUrl);
+
+xhr.setRequestHeader('Content-Type', 'application/json');
+
+xhr.onreadystatechange = () => {
+    if(xhr.readyState === 4 && xhr.status === 200){
+        console.log(order);
+        console.log(xhr.responseText);
+        createOrderPage();
+    }
+}
+xhr.send(params);*/
 
 const buildOrder = async (orderObject) => {
     try {
+        //const queryString = location.search;
+        //const urlParameters = new URLSearchParams(queryString);
+        //const order = urlParameters.get('order');
         const orderPromise = orderRequest(orderObject);
         const orderResponse = await orderPromise;
         return orderResponse;
@@ -398,15 +428,14 @@ const buildOrder = async (orderObject) => {
 orderRequest = (verb, url, data) => {
     if (!document.getElementById('cart-display')) {
     return new Promise ((resolve, reject) => {
-        let customerOrder = localStorage.getItem('customerInfo');
+        let customerOrder = localStorage.getItem('customerOrder');
         customerOrder = JSON.parse(customerOrder);
-        let order = customerOrder;
-        const confirmUrl = new URL("confirm.html");
-        confirmUrl.searchParams.append(order);
         let orderApiRequest = new XMLHttpRequest();
-        orderApiRequest.open('POST', 'http://localhost:3000/api/teddies/' + order);
+        let url = 'confirm.html';
+        let order = 'customer' + customerOrder.customerInformation[1] + '&amp;=' + customerOrder.orderId;
+        orderApiRequest.open("POST", url);
         orderApiRequest.setRequestHeader('Content-Type', 'application/json');
-        orderApiRequest.send(JSON.stringify(data));
+        orderApiRequest.send(order);
         orderApiRequest.onreadystatechange = () => {
             if (orderApiRequest.readyState === 4) {
                 if (orderApiRequest.status === 200 || orderApiRequest.status === 201) {
@@ -441,6 +470,7 @@ const createOrderPage = (response) => {
         orderCost.textContent = "$" + cartTotal;
     }
 }
+
 cartTotal();
 loadCart();
 displayCart();
