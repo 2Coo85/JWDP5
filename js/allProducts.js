@@ -1,20 +1,3 @@
-makeRequest = () => {
-    return new Promise((resolve, reject) => {
-        let apiRequest = new XMLHttpRequest();
-        apiRequest.open('GET', 'http://localhost:3000/api/teddies/');
-        apiRequest.send();
-        apiRequest.onreadystatechange = () => {
-            if (apiRequest.readyState === 4) {
-                if(apiRequest.status === 200) {
-                    resolve(JSON.parse(apiRequest.response));
-                } else {
-                    reject('Server is unavailable');
-                }
-            }
-        };
-    });
-}
-
 createProductBox = (response) => {
     const productListing = document.getElementById('product-listing');
     for (var product of response){
@@ -22,13 +5,13 @@ createProductBox = (response) => {
     }
 }
 
-init = async () => {
+const init = async () => {
     try {
         const requestPromise = makeRequest();
         const response = await requestPromise;
         createProductBox(response);
     } catch (error) {
-        document.querySelector('main-content').innerHTML = '<h2>' + error + '</h2>';
+        document.querySelector('.main-content').innerHTML = '<h2>' + error + '</h2>';
     }
 }
 

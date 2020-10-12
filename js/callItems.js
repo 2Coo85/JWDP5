@@ -20,8 +20,6 @@ makeRequest = () => {
     });
 };
 
-
-
 createProductBox = (response) => {
     //get DOM elements
     
@@ -102,9 +100,8 @@ init = async () => {
         
         createProductBox(response);
     } catch (error) {
-        document.getElementById('cart-display').innerHTML = '<h2>' + error + '</h2>';
+        document.getElementById('productImage-display').innerHTML = '<h2>' + error + '</h2>';
     }
 };
 
 init();
-displayCart();
