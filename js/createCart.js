@@ -1,4 +1,3 @@
-let confirmOrderPage = document.getElementById('confirmation');
 const customerForm = document.getElementById('customer-info');
 
 let orderObject = {
@@ -6,7 +5,7 @@ let orderObject = {
     'orderInformation':{}
 }
 
-function loadCart () {
+let loadCart = () => {
     
     let productQty = localStorage.getItem('updateCart');
         
@@ -198,14 +197,6 @@ const order = async (url, data) => {
     return await response.json();
 }
 
-let submitOrderBtn = document.getElementById('submit-order');
-
-submitOrderBtn.addEventListener('submit', async ($event) =>{
-    $event.preventDefault();
-    const response = await order('http://localhost:3000/api/teddies/order', orderObject);
-    window.location = 'order.html';
-});
-
 let createCustomerForm = () => {
     if (customerForm){
         //create and get DOM elements
@@ -270,138 +261,139 @@ let createCustomerForm = () => {
         email.setAttribute('data-value-missing', 'Field is required');
         customerForm.appendChild(emailLabel);
         customerForm.appendChild(email);
+    }
+    validateForm()
+}
 
-        //validation for input elements
-        let isFirstNameValid = false;
-        let isLastNameValid = false;
-        let isAddressValid = false;
-        let isCityValid = false;
-        let isEmailValid = false;
-        const regExName = /^[A-Za-z] {3,32}$/;
-        const regExAddress = /^[A-Za-z0-9 ]{7,32}$/;
-        const regExEmail = /^[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+ //validation for input elements
 
-        let inCart = localStorage.getItem('inCart');
-        inCart = JSON.parse(inCart);
+    const regExName = /^[A-Za-z] {3,32}$/;
+    const regExAddress = /^[A-Za-z0-9 ]{7,32}$/;
+    const regExEmail = /^[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
 
-        if ((firstName.value === "") && (lastName.value === "") && (address.value === "") && (city.value === "") && (email.value === "")){
-            if (firstName.value === ""){
-                firstName.style.backgroundColor = 'darkgray';
-                firstName.addEventListener('blur', () => {
-                    if (!firstName.checkValidity() || regExName.test(firstName.value == false)) {
-                        firstName.style.border = "medium red solid";
-                        console.log("field is empty/entry invalid");
-                    } else {
-                        firstName.style.border = "medium green solid";
-                        isFirstNameValid = true;
-                        localStorage.setItem('fName', firstName.value);
-                        console.log(firstName.value);
-                        console.log("entry is valid");
-                    }  
-                });
+    const notEmpty = value => value !== "" ? true : false;
+    const longEnough = value => value.length >= 2 ? true : false;
+    const validEmail = (value) => value.match(regExEmail) ? true : false;
+    const validAddress = (value) => value.match(regExAddress);
+    const validInput = (value) => notEmpty(value) && longEnough(value);
 
-            }
-            if (lastName.value === ""){
-                lastName.style.backgroundColor = 'darkgray';
-                lastName.addEventListener('blur', () => {
-                   if (!lastName.checkValidity() || regExName.test(lastName.value == false)) {
-                        lastName.style.border = "medium red solid";
-                        console.log("field is empty");
+const validateForm = () => {
+    if (firstName.value === ""){
+            firstName.style.backgroundColor = 'darkgray';
+            firstName.addEventListener('blur', () => {
+                if (!validInput(firstName.value)) {
+                    firstName.style.border = "medium red solid";
+                    console.log("field is empty/entry invalid");
                     } else {
-                        lastName.style.border = "medium green solid";
-                        isLastNameValid = true;
-                        localStorage.setItem('lName', lastName.value);
-                        console.log(lastName.value);
-                        console.log("entry is valid");
-                    } 
-                });
-            }
-            if (address.value === "") {
-                address.style.backgroundColor = 'darkgray';
-                address.addEventListener('blur', () => {
-                    if (!address.checkValidity() || regExAddress.test(address.value) == false) {
-                        address.style.border = "medium red solid";
-                        console.log("field is empty");
-                    } else {
-                        address.style.border = "medium green solid";
-                        isAddressValid = true;
-                        localStorage.setItem('address', address.value);
-                        console.log(address.value);
-                        console.log("entry is valid");
-                    }
-                });
-            }
-            if (city.value === "") {
-                city.style.backgroundColor = 'darkgray';
-                city.addEventListener('blur', () => {
-                    if (!city.checkValidity() || regExName.test(city.value == false)) {
-                        city.style.border = "medium red solid";
-                        console.log("field is empty");
-                    } else {
-                        city.style.border = "medium green solid";
-                        isCityValid = true;
-                        localStorage.setItem('city', city.value);
-                        console.log(city.value);
-                        console.log("entry is valid");
-                    }
-                });
-            }
-            if (email.value === "") {
-                email.style.backgroundColor = 'darkgray';
-                email.addEventListener('input', () => {
-                    if (!email.checkValidity() || regExEmail.test(email.value == false)) {
-                       email.style.border = "medium red solid";
-                        console.log("field is empty");
-                    } else {
-                        email.style.border = "medium green solid";
-                        isEmailValid = true;
-                        localStorage.setItem('email', email.value)
-                        console.log(email.value);
-                        console.log("entry is valid");
-                    }
-                });
-            }
-        }
+                            firstName.style.border = "medium green solid";
+                            localStorage.setItem('fName', firstName.value);
+                            console.log(firstName.value);
+                            console.log("entry is valid");
+                        }  
+                    });
+
+}
+    if (lastName.value === ""){
+                    lastName.style.backgroundColor = 'darkgray';
+                    lastName.addEventListener('blur', () => {
+                       if (!validInput(lastName.value)) {
+                            lastName.style.border = "medium red solid";
+                            console.log("field is empty");
+                        } else {
+                            lastName.style.border = "medium green solid";
+                            localStorage.setItem('lName', lastName.value);
+                            console.log(lastName.value);
+                            console.log("entry is valid");
+                        } 
+                    });
+}
+    if (address.value === "") {
+                    address.style.backgroundColor = 'darkgray';
+                    address.addEventListener('blur', () => {
+                        if (!validAddress(address.value) && longEnough(address.value)) {
+                            address.style.border = "medium red solid";
+                            console.log("field is empty");
+                        } else {
+                            address.style.border = "medium green solid";
+                            localStorage.setItem('address', address.value);
+                            console.log(address.value);
+                            console.log("entry is valid");
+                        }
+                    });
+}
+    if (city.value === "") {
+                    city.style.backgroundColor = 'darkgray';
+                    city.addEventListener('blur', () => {
+                        if (!validInput(city.value)) {
+                            city.style.border = "medium red solid";
+                            console.log("field is empty");
+                        } else {
+                            city.style.border = "medium green solid";
+                            localStorage.setItem('city', city.value);
+                            console.log(city.value);
+                            console.log("entry is valid");
+                        }
+                    });
+}
+    if (email.value === "") {
+            email.style.backgroundColor = 'darkgray';
+            email.addEventListener('input', () => {
+                if (!validEmail(email.value))  {
+                    email.style.border = "medium red solid";
+                    console.log("field is empty");
+                } else {
+                    email.style.border = "medium green solid";
+                    localStorage.setItem('email', email.value)
+                            console.log(email.value);
+                            console.log("entry is valid");
+                        }
+                    });
+}
+    
+    return orderObject.customerInformation = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        address: address.value,
+        city: city.value,
+        email: email.value
     }
 }
 
-let createOrderPage = (response) => {
-    //get DOM elements from confirmation page
-    let orderNumber = document.getElementById('order-number');
-    let orderCost = document.getElementById('order-cost');
+let submitOrderBtn = document.getElementById('submit-order');
+
+submitOrderBtn.addEventListener('click', async ($event) =>{
+    $event.preventDefault();
     let inCart = localStorage.getItem('inCart');
-    inCart = JSON.parse(inCart);
-    const orderId = uuid();
+    inCart = JSON.parse(inCart); 
     
-    //get information form localStorage
-    let firstName = localStorage.getItem('fName');
-    let lastName = localStorage.getItem('lName');
-    let address = localStorage.getItem('address');
-    let city = localStorage.getItem('city');
-    let email = localStorage.getItem('email');
+    //get items from localStorage
+    let cFirstName = localStorage.getItem('fName');
+    let cLastName = localStorage.getItem('lName');
+    let cAddress = localStorage.getItem('address');
+    let cCity = localStorage.getItem('city');
+    let cEmail = localStorage.getItem('email');
     
-    orderResponse = {
+    orderObject = {
         customerInformation: {
-           'firstName': firstName,
-           'lastName': lastName,
-           'address': address,
-           'city': city,
-           'email': email 
+            firstName: cFirstName,
+            lastName: cLastName,
+            address: cAddress,
+            city: cCity,
+            email: cEmail
         },
-        orderInformation: inCart,
-        orderId: orderId
+        orderInformation: inCart
     }
-    
-    let cartTotal = localStorage.getItem('itemTotals');
-    cartTotal = parseInt(cartTotal);
-    if (confirmOrderPage) {
-        localStorage.clear();
+    const validForm = validateForm();
+    //let orderId = orderTeddies.uuid();
+    if (validForm !== false){
+        console.log(orderObject);
+        const response = await order('http://localhost:3000/api/teddies/order', orderObject);
+        let cartTotal = localStorage.getItem('itemTotals');
+        cartTotal = parseInt(cartTotal);
         sessionStorage.setItem('customerOrder', JSON.stringify(response));
-        console.log(response);
-        orderNumber.textContent = 'Order# ';
-        orderCost.textContent = cartTotal;
+        location.href = `order.html?id=${response.orderId}&price=${cartTotal}`;
     }
-}
+});
 
 cartTotal();
 loadCart();
