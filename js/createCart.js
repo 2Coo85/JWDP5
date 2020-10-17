@@ -1,5 +1,5 @@
 const customerForm = document.getElementById('customer-info');
-
+const uuid = require('./node_modules/uuid/v1');
 let orderObject = {
     'customerInformation': {},
     'orderInformation':{}
@@ -384,7 +384,7 @@ submitOrderBtn.addEventListener('click', async ($event) =>{
         orderInformation: inCart
     }
     const validForm = validateForm();
-    //let orderId = orderTeddies.uuid();
+    let orderId = uuid();
     if (validForm !== false){
         console.log(orderObject);
         const response = await order('http://localhost:3000/api/teddies/order', orderObject);
