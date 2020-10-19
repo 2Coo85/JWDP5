@@ -1,6 +1,7 @@
-#cart-display{
+#cart-display.main-content{
     display: flex;
     flex-flow: column wrap;
+    max-width: 100%;
 }
 
 /*#cart-container{
