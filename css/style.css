@@ -12,24 +12,13 @@ body {
 .mainContainer {
   margin: 2% 4%;
   display: block;
+  width: 100%;
 }
 
 .main-content {
-  width: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
+  flex-flow: column nowrap;
 }
 
-@media screen and (max-width: 600px) {
-  .mainContainer {
-    max-width: 550px;
-  }
-
-  .main-content {
-    flex-flow: column nowrap;
-  }
-}
 .cart-button {
   width: 100%;
   height: 50px;
@@ -124,32 +113,6 @@ h5 {
   font-size: 1em;
 }
 
-@media screen and (max-width: 600px) {
-  .page-header {
-    display: flex;
-    flex-flow: column wrap;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .page-header h3 {
-    float: none;
-  }
-
-  .title-header img {
-    width: 35px;
-    height: 38px;
-    float: left;
-    margin-top: 2px;
-    margin-left: 2%;
-  }
-
-  .title-header h1 {
-    font-size: 2em;
-    padding-top: 8px;
-  }
-}
 .nav {
   font-size: 1.25em;
   background-color: #f46e6b;
@@ -199,16 +162,6 @@ h5 {
   color: #f46e6b;
 }
 
-@media screen and (max-width: 600px) {
-  .products img {
-    width: 105px;
-    height: 90px;
-  }
-
-  .products {
-    margin-right: 10px;
-  }
-}
 .main-content {
   width: 100%;
   display: flex;
@@ -232,19 +185,6 @@ h3, p, h5 {
   float: right;
 }
 
-@media screen and (max-width: 600px) {
-  .mainContainer {
-    max-width: 95%;
-  }
-
-  .main-content {
-    max-width: 450px;
-    max-height: 800px;
-    display: flex;
-    flex-flow: column wrap;
-    margin-left: -5%;
-  }
-}
 main {
   flex: 40%;
   vertical-align: top;

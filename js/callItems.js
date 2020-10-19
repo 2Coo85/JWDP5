@@ -39,10 +39,10 @@ createProductBox = (response) => {
     const asideDiv = document.createElement('div');
     const qtyDropDownLabel = document.createElement('label');
     const qtyDropDown = document.createElement('select');
-    
+
     productDisplay.appendChild(productBox);
     
-    mainDiv.classList.add('col-6');
+    mainDiv.classList.add('col-xs-12', 'col-sm-12', 'col-md-6', 'col-lg-6');
     mainDiv.style.textAlign = 'center';
     productBox.appendChild(mainDiv);
     
@@ -54,7 +54,7 @@ createProductBox = (response) => {
     mainDiv.innerHTML += '<p style="text-align: center">' + response.description + '</p>';
     
     detailDisplay.appendChild(asideDiv);
-    asideDiv.classList.add('col-6');
+    asideDiv.classList.add('col-xs-12', 'col-sm-12', 'col-md-6', 'col-lg-6');
     asideDiv.style.marginTop = '20px';
     asideDiv.innerHTML += '<h3>' + response.name + '</h3>';
     

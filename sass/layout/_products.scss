@@ -27,13 +27,3 @@
     text-decoration: none;
     color: $drkPink;
 }
-
-@media screen and (max-width: 600px) {
-    .products img{
-        width: 105px;
-        height: 90px;
-    }
-    .products{
-        margin-right: 10px;
-    }
-}

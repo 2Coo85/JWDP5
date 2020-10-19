@@ -8,16 +8,3 @@
 #shopping-cart{
     float: right;
 }
-
-@media screen and (max-width: 600px) {
-    .mainContainer {
-        max-width: 95%;
-    }
-    .main-content{
-        max-width: 450px;
-        max-height: 800px;
-        display: flex;
-        flex-flow: column wrap;
-        margin-left: -5%;
-    }
-}
