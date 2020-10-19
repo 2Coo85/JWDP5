@@ -1,6 +1,5 @@
 .products{
     display: flex;
-    flex-flow: column-reverse;
     justify-content: center;
     align-items: center;
     margin-top: 15px;
@@ -9,7 +8,6 @@
     background-color: $brown;
     padding: 3px;
     margin: auto;
-    flex: 2 2 150px;
     margin-bottom: 50px;
     margin-right: 50px;
     color: lighten($lgtpink, 15);
@@ -28,4 +26,14 @@
 .products a{
     text-decoration: none;
     color: $drkPink;
+}
+
+@media screen and (max-width: 600px) {
+    .products img{
+        width: 105px;
+        height: 90px;
+    }
+    .products{
+        margin-right: 10px;
+    }
 }

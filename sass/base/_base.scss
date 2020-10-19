@@ -22,8 +22,11 @@ body{
     justify-content: space-around;
 }
 
-@media (max-width: 600px){
-    .mainContainer, .main-content form {
+@media screen and (max-width: 600px){
+    .mainContainer {
         max-width: 550px;
+    }
+    .main-content{
+        flex-flow: column nowrap;
     }
 }

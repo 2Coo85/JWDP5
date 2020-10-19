@@ -21,9 +21,13 @@ body {
   justify-content: space-around;
 }
 
-@media (max-width: 600px) {
-  .mainContainer, .main-content form {
+@media screen and (max-width: 600px) {
+  .mainContainer {
     max-width: 550px;
+  }
+
+  .main-content {
+    flex-flow: column nowrap;
   }
 }
 .cart-button {
@@ -120,6 +124,32 @@ h5 {
   font-size: 1em;
 }
 
+@media screen and (max-width: 600px) {
+  .page-header {
+    display: flex;
+    flex-flow: column wrap;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .page-header h3 {
+    float: none;
+  }
+
+  .title-header img {
+    width: 35px;
+    height: 38px;
+    float: left;
+    margin-top: 2px;
+    margin-left: 2%;
+  }
+
+  .title-header h1 {
+    font-size: 2em;
+    padding-top: 8px;
+  }
+}
 .nav {
   font-size: 1.25em;
   background-color: #f46e6b;
@@ -141,7 +171,6 @@ h5 {
 
 .products {
   display: flex;
-  flex-flow: column-reverse;
   justify-content: center;
   align-items: center;
   margin-top: 15px;
@@ -150,7 +179,6 @@ h5 {
   background-color: #915b39;
   padding: 3px;
   margin: auto;
-  flex: 2 2 150px;
   margin-bottom: 50px;
   margin-right: 50px;
   color: #fff9f9;
@@ -171,6 +199,16 @@ h5 {
   color: #f46e6b;
 }
 
+@media screen and (max-width: 600px) {
+  .products img {
+    width: 105px;
+    height: 90px;
+  }
+
+  .products {
+    margin-right: 10px;
+  }
+}
 .main-content {
   width: 100%;
   display: flex;
@@ -186,14 +224,27 @@ h3, p, h5 {
 .main-content {
   width: 100%;
   display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
+  flex-flow: column wrap;
+  max-height: 600px;
 }
 
 #shopping-cart {
   float: right;
 }
 
+@media screen and (max-width: 600px) {
+  .mainContainer {
+    max-width: 95%;
+  }
+
+  .main-content {
+    max-width: 450px;
+    max-height: 800px;
+    display: flex;
+    flex-flow: column wrap;
+    margin-left: -5%;
+  }
+}
 main {
   flex: 40%;
   vertical-align: top;

@@ -1,11 +1,23 @@
 .main-content{
     width: 100%;
     display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
+    flex-flow: column wrap;
+    max-height: 600px;
 }
 
 #shopping-cart{
     float: right;
 }
 
+@media screen and (max-width: 600px) {
+    .mainContainer {
+        max-width: 95%;
+    }
+    .main-content{
+        max-width: 450px;
+        max-height: 800px;
+        display: flex;
+        flex-flow: column wrap;
+        margin-left: -5%;
+    }
+}

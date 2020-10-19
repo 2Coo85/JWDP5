@@ -1,8 +1,8 @@
 const customerForm = document.getElementById('customer-info');
-const uuid = require('./node_modules/uuid/v1');
+
 let orderObject = {
-    'customerInformation': {},
-    'orderInformation':{}
+    'contact': {},
+    'products':[]
 }
 
 let loadCart = () => {
@@ -25,7 +25,8 @@ let setUpItem = (items, products) => {
             "quantity": 0,
             "color": color,
             "price": items.price,
-            "image": items.imageUrl
+            "image": items.imageUrl,
+            "id": items._id
         };
       
     if (inCart != null) {
@@ -43,6 +44,7 @@ let setUpItem = (items, products) => {
         };
     }
     localStorage.setItem('inCart', JSON.stringify(inCart));
+    console.log(products.id);
 };
 
 //get color of item selected from dropdown value
@@ -159,7 +161,7 @@ let displayCart = (items) => {
     //Displaying items in the cart
     if (inCart && cartContainer) {
         cartContainer.innerHTML = '';
-        Object.values(inCart).map(item => {
+        Object.values(inCart).map(item => {    
             cartContainer.innerHTML += `
                 <div class='product-items'>
                     <button type='button' class='removeOne btn btn-danger' onclick='removeItem()'>X</button>
@@ -186,7 +188,6 @@ let displayCart = (items) => {
 };
 
 const order = async (url, data) => {
-    console.log(orderObject);
     const response = await fetch(url,{
         headers: {
             'Content-Type': 'application/json'
@@ -350,7 +351,7 @@ const validateForm = () => {
                     });
 }
     
-    return orderObject.customerInformation = {
+    return orderObject.contact = {
         firstName: firstName.value,
         lastName: lastName.value,
         address: address.value,
@@ -373,25 +374,19 @@ submitOrderBtn.addEventListener('click', async ($event) =>{
     let cCity = localStorage.getItem('city');
     let cEmail = localStorage.getItem('email');
     
-    orderObject = {
-        customerInformation: {
-            firstName: cFirstName,
-            lastName: cLastName,
-            address: cAddress,
-            city: cCity,
-            email: cEmail
-        },
-        orderInformation: inCart
-    }
     const validForm = validateForm();
-    let orderId = uuid();
-    if (validForm !== false){
-        console.log(orderObject);
-        const response = await order('http://localhost:3000/api/teddies/order', orderObject);
-        let cartTotal = localStorage.getItem('itemTotals');
-        cartTotal = parseInt(cartTotal);
-        sessionStorage.setItem('customerOrder', JSON.stringify(response));
-        location.href = `order.html?id=${response.orderId}&price=${cartTotal}`;
+        if (validForm !== false){
+            Object.values(inCart).map(items => {
+                orderObject.products.push(items.id);
+            })
+            console.log(orderObject);
+            const response = await order('http://localhost:3000/api/teddies/order', orderObject);
+            console.log(orderObject);
+            console.log(response);
+            let cartTotal = localStorage.getItem('itemTotals');
+            cartTotal = parseInt(cartTotal);
+            sessionStorage.setItem('customerOrder', JSON.stringify(response));
+            location.href = `order.html?id=${response.orderId}&price=${cartTotal}`;
     }
 });
 
