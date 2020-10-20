@@ -135,16 +135,21 @@ const calculate = () => {
 };
 
 let removeAll = (items) => {
+    let cartContainer = document.querySelector('.items');
     let cartItems = localStorage.getItem('inCart');
     let itemTotals = localStorage.getItem('itemTotals');
     let productQty = localStorage.getItem('updateCart');
     if (cartItems, itemTotals, productQty) {
+        document.getElementById('numberOfCartItems').innerHTML = 0;
+        cartContainer.innerHTML = '';
         localStorage.clear();
         location.reload;
     }
     setUpItem(items);
     updateCart();
 };
+
+if (document.getElementById('cart-display')) {
 //displaying the items in the cart
 let displayCart = (items) => {
     //getting items from localStorage and/or DOM
@@ -362,34 +367,36 @@ const validateForm = () => {
 
 let submitOrderBtn = document.getElementById('submit-order');
 
-submitOrderBtn.addEventListener('click', async ($event) =>{
-    $event.preventDefault();
-    let inCart = localStorage.getItem('inCart');
-    inCart = JSON.parse(inCart); 
-    
-    //get items from localStorage
-    let cFirstName = localStorage.getItem('fName');
-    let cLastName = localStorage.getItem('lName');
-    let cAddress = localStorage.getItem('address');
-    let cCity = localStorage.getItem('city');
-    let cEmail = localStorage.getItem('email');
-    
-    const validForm = validateForm();
-        if (validForm !== false){
-            Object.values(inCart).map(items => {
-                orderObject.products.push(items.id);
-            })
-            console.log(orderObject);
-            const response = await order('http://localhost:3000/api/teddies/order', orderObject);
-            console.log(orderObject);
-            console.log(response);
-            let cartTotal = localStorage.getItem('itemTotals');
-            cartTotal = parseInt(cartTotal);
-            sessionStorage.setItem('customerOrder', JSON.stringify(response));
-            location.href = `order.html?id=${response.orderId}&price=${cartTotal}`;
-    }
-});
+    submitOrderBtn.addEventListener('click', async ($event) =>{
+        $event.preventDefault();
+        let inCart = localStorage.getItem('inCart');
+        inCart = JSON.parse(inCart); 
 
-cartTotal();
+        //get items from localStorage
+        let cFirstName = localStorage.getItem('fName');
+        let cLastName = localStorage.getItem('lName');
+        let cAddress = localStorage.getItem('address');
+        let cCity = localStorage.getItem('city');
+        let cEmail = localStorage.getItem('email');
+
+        const validForm = validateForm();
+            if (validForm !== false){
+                Object.values(inCart).map(items => {
+                    orderObject.products.push(items.id);
+                })
+                console.log(orderObject);
+                const response = await order('http://localhost:3000/api/teddies/order', orderObject);
+                console.log(orderObject);
+                console.log(response);
+                let cartTotal = localStorage.getItem('itemTotals');
+                cartTotal = parseInt(cartTotal);
+                sessionStorage.setItem('customerOrder', JSON.stringify(response));
+                location.href = `order.html?id=${response.orderId}&price=${cartTotal}`;
+        }
+    });
+    displayCart();
+    cartTotal();
+}
+
 loadCart();
-displayCart();
+cartTotal();

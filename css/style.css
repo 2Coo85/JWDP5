@@ -67,7 +67,7 @@ body {
 .page-header {
   font-size: 1em;
   width: 100%;
-  margin-bottom: 6%;
+  margin-bottom: 1%;
   margin-top: 8%;
   display: inline-flex;
 }
@@ -198,16 +198,13 @@ main {
   display: flex;
   flex-flow: column wrap;
   max-width: 100%;
+  min-height: 900px;
 }
 
-/*#cart-container{
-    width: 100%;
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: space-between;
-    margin: 0 auto;
-    margin-top: 50px;
-}*/
+#cart-container {
+  margin-bottom: 75px;
+}
+
 #cart-header {
   width: 97%;
   display: flex;
