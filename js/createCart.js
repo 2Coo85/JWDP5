@@ -2,13 +2,13 @@ const customerForm = document.getElementById('customer-info');
 
 let orderObject = {
     'contact': {},
-    'products':[]
+    'products': []
 }
 
 let loadCart = () => {
-    
+
     let productQty = localStorage.getItem('updateCart');
-        
+
     if (productQty || !document.getElementById('confirmation-page')) {
         document.getElementById('numberOfCartItems').textContent = productQty;
     }
@@ -19,18 +19,17 @@ let setUpItem = (items, products) => {
     let inCart = localStorage.getItem('inCart');
     inCart = JSON.parse(inCart);
     let color = localStorage.getItem('color');
-    products = 
-        {
-            "name": items.name, 
-            "quantity": 0,
-            "color": color,
-            "price": items.price,
-            "image": items.imageUrl,
-            "id": items._id
-        };
-      
+    products = {
+        "name": items.name,
+        "quantity": 0,
+        "color": color,
+        "price": items.price,
+        "image": items.imageUrl,
+        "id": items._id
+    };
+
     if (inCart != null) {
-        if (inCart[products.name] == undefined){
+        if (inCart[products.name] == undefined) {
             inCart = {
                 ...inCart,
                 [products.name]: products
@@ -51,7 +50,7 @@ let setUpItem = (items, products) => {
 const getColor = (items) => {
     let colorSelected = document.getElementById('colorSelection');
     let resultingColor = colorSelected.value;
-    let itemColor =  resultingColor;
+    let itemColor = resultingColor;
     localStorage.setItem('color', itemColor);
 };
 
@@ -59,13 +58,13 @@ const getColor = (items) => {
 function updateCart(items, products) {
     let productQty = localStorage.getItem('updateCart');
     productQty = parseInt(productQty);
-        
-    if(productQty) {
+
+    if (productQty) {
         localStorage.setItem('updateCart', productQty + 1);
         document.getElementById('numberOfCartItems').textContent = productQty + 1;
     } else {
         localStorage.setItem('updateCart', 1);
-         document.getElementById('numberOfCartItems').textContent = 1;
+        document.getElementById('numberOfCartItems').textContent = 1;
     }
     setUpItem(items);
 }
@@ -75,32 +74,33 @@ const cartTotal = (items) => {
     let inCart = localStorage.getItem('inCart');
     inCart = JSON.parse(inCart);
     let total = 0;
-    
-    if (inCart){
-    for (const [key, item] of Object.entries(inCart)) {
-        let subtotal = document.getElementById('subtotal' + item.name);
-        let inCart = localStorage.getItem('inCart');
-        inCart = JSON.parse(inCart);
-        let subTotal = {};
-        if (subtotal != null){
-            subTotal = {
-                ..."productValue",
-                "productValue": inCart[item.name].quantity * item.price / 100,
-            };
-            console.log(subTotal);
-        } else {
-            subTotal = {
-                "productValue": inCart[item.name].quantity * item.price / 100
-            };
+
+    if (inCart) {
+        for (const [key, item] of Object.entries(inCart)) {
+            let subtotal = document.getElementById('subtotal' + item.name);
+            let inCart = localStorage.getItem('inCart');
+            inCart = JSON.parse(inCart);
+            let subTotal = {};
+            if (subtotal != null) {
+                subTotal = {
+                    ..."productValue",
+                    "productValue": inCart[item.name].quantity * item.price / 100,
+                };
+                console.log(subTotal);
+            } else {
+                subTotal = {
+                    "productValue": inCart[item.name].quantity * item.price / 100
+                };
+            }
+
+            total += subTotal.productValue;
+            localStorage.setItem('itemTotals', JSON.stringify(total));
+
         }
-        
-        total += subTotal.productValue;
-        localStorage.setItem('itemTotals', JSON.stringify(total));
-        
-    }
     }
 };
 
+//recalculate totals for items with updated quantity and display new total
 const calculate = () => {
     let inCart = localStorage.getItem('inCart');
     inCart = JSON.parse(inCart);
@@ -113,20 +113,19 @@ const calculate = () => {
     let input = 0;
     let totalQty = 0;
     let subTotal = 0;
-    
+
     let qtyInputs = document.querySelectorAll('input.quantity');
     let initialSubtotals = document.querySelectorAll('.subtotals');
     let quantities = Object.values(inCart);
-    
-    console.log(quantities);
+
     for (let i = 0; i < qtyInputs.length; i++) {
         totalQty += parseInt(qtyInputs[i].value);
-        if (quantities[i].quantity <= qtyInputs[i].value || quantities[i].quantity >= qtyInputs[i].value){
+        if (quantities[i].quantity <= qtyInputs[i].value || quantities[i].quantity >= qtyInputs[i].value) {
             input = qtyInputs[i].value * quantities[i].price / 100;
             subTotal += input;
-            initialSubtotals[i].textContent = '$' + input;
+            initialSubtotals[i].textContent = '$' + input + '.00';
         }
-        grandTotal.textContent = '$' + subTotal;
+        grandTotal.textContent = '$' + subTotal + '.00';
         cartDisplay.textContent = totalQty;
         productQty = totalQty;
         localStorage.setItem('updateCart', productQty);
@@ -134,6 +133,7 @@ const calculate = () => {
     }
 };
 
+//remove all items from the cart
 let removeAll = (items) => {
     let cartContainer = document.querySelector('.items');
     let cartItems = localStorage.getItem('inCart');
@@ -149,129 +149,132 @@ let removeAll = (items) => {
     updateCart();
 };
 
+loadCart();
+cartTotal();
+
+//actions that happen only on the cart page
 if (document.getElementById('cart-display')) {
-//displaying the items in the cart
-let displayCart = (items) => {
-    //getting items from localStorage and/or DOM
-    let inCart = localStorage.getItem('inCart');
-    inCart = JSON.parse(inCart);
-    let cartContainer = document.querySelector('.items');
-    let itemQuantity = localStorage.getItem('itemsInCart');
-    itemQuantity = JSON.parse(itemQuantity);
-    let productQty = localStorage.getItem('updateCart');
-    productQty = parseInt(productQty);
-    let cartTotal = localStorage.getItem('itemTotals');
-    cartTotal = JSON.parse(cartTotal);
-    
-    //Displaying items in the cart
-    if (inCart && cartContainer) {
-        cartContainer.innerHTML = '';
-        Object.values(inCart).map(item => {    
+    //displaying the items in the cart
+    let displayCart = (items) => {
+        //getting items from localStorage and/or DOM
+        let inCart = localStorage.getItem('inCart');
+        inCart = JSON.parse(inCart);
+        let cartContainer = document.querySelector('.items');
+        let itemQuantity = localStorage.getItem('itemsInCart');
+        itemQuantity = JSON.parse(itemQuantity);
+        let productQty = localStorage.getItem('updateCart');
+        productQty = parseInt(productQty);
+        let cartTotal = localStorage.getItem('itemTotals');
+        cartTotal = JSON.parse(cartTotal);
+
+        //Displaying items in the cart
+        if (inCart && cartContainer) {
+            cartContainer.innerHTML = '';
+            Object.values(inCart).map(item => {
+                cartContainer.innerHTML += `
+                    <div class='product-items'>
+                        <img src='${item.image}'><span> ${item.name}</span>
+                    </div>
+                    <div class='price'>
+                        $${item.price/100}.00
+                    </div>
+                    <div id='inputs' class='quantity'>
+                        <input type='number' id='qtyInput + ${item.name}' value='${item.quantity}' class='quantity' min='1'>
+                    </div>
+                    <div class='total subtotals' id='subtotal + ${item.name}'>$ ${item.quantity * item.price/100}.00`
+            });
+
             cartContainer.innerHTML += `
-                <div class='product-items'>
-                    <button type='button' class='removeOne btn btn-danger' onclick='removeItem()'>X</button>
-                    <img src='${item.image}'><span> ${item.name}</span>
+                <div class="basketTotalContainer">
+                <button type="button" id="update-total" onclick="calculate()" class="main-button">Update Cart</button>
+                    <h4 class="basketTotalTitle">Basket Total</h4>
+                    <h4 class="basketTotal" id="total">$${cartTotal}.00</h4>
                 </div>
-                <div class='price'>
-                    $${item.price/100}.00
-                </div>
-                <div id='inputs' class='quantity'>
-                    <input type='number' id='qtyInput + ${item.name}' value='${item.quantity}' class='quantity' min='1'>
-                </div>
-                <div class='total subtotals' id='subtotal + ${item.name}'>$ ${item.quantity * item.price/100}.00` 
-        });
-        
-        cartContainer.innerHTML += `
-            <div class="basketTotalContainer">
-            <button type="button" id="update-total" onclick="calculate()" class="main-button">Update Cart</button>
-                <h4 class="basketTotalTitle">Basket Total</h4>
-                <h4 class="basketTotal" id="total">$${cartTotal}.00</h4>
-            </div>
-        `;
+            `;
+        }
+        createCustomerForm();
+    };
+
+    const order = async (url, data) => {
+        const response = await fetch(url, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        return await response.json();
     }
-    createCustomerForm();
-};
 
-const order = async (url, data) => {
-    const response = await fetch(url,{
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(data)
-    })
-    return await response.json();
-}
+    let createCustomerForm = () => {
+        if (customerForm) {
+            //create DOM elements
+            const firstNameLabel = document.createElement('label');
+            const firstName = document.createElement('input');
+            const lastNameLabel = document.createElement('label');
+            const lastName = document.createElement('input');
+            const addressLabel = document.createElement('label');
+            const address = document.createElement('input');
+            const cityLabel = document.createElement('label');
+            const city = document.createElement('input');
+            const emailLabel = document.createElement('label');
+            const email = document.createElement('input');
 
-let createCustomerForm = () => {
-    if (customerForm){
-        //create and get DOM elements
-        const firstNameLabel = document.createElement('label');
-        const firstName = document.createElement('input');
-        const lastNameLabel = document.createElement('label');
-        const lastName = document.createElement('input');
-        const addressLabel = document.createElement('label');
-        const address = document.createElement('input');
-        const cityLabel = document.createElement('label');
-        const city = document.createElement('input');
-        const emailLabel = document.createElement('label');
-        const email = document.createElement('input');
+            //set attributes and innerHTML for elements
+            firstNameLabel.setAttribute('for', 'firstName');
+            firstNameLabel.innerHTML = "First Name";
+            firstName.setAttribute('type', 'text');
+            firstName.setAttribute('name', 'firstName');
+            firstName.setAttribute('id', 'firstName');
+            firstName.setAttribute('required', 'required');
+            firstName.setAttribute('data-value-missing', 'Field is required');
+            customerForm.appendChild(firstNameLabel);
+            customerForm.appendChild(firstName);
 
-        //set attributes and innerHTML for elements
-        firstNameLabel.setAttribute('for', 'firstName');
-        firstNameLabel.innerHTML = "First Name";
-        firstName.setAttribute('type', 'text');
-        firstName.setAttribute('name', 'firstName');
-        firstName.setAttribute('id', 'firstName');
-        firstName.setAttribute('required', 'required');
-        firstName.setAttribute('data-value-missing', 'Field is required');
-        customerForm.appendChild(firstNameLabel);
-        customerForm.appendChild(firstName);
+            lastNameLabel.setAttribute('for', 'lastName');
+            lastNameLabel.innerHTML = "Last Name";
+            lastName.setAttribute('type', 'text');
+            lastName.setAttribute('name', 'lastName');
+            lastName.setAttribute('id', 'lastName');
+            lastName.setAttribute('required', 'required');
+            lastName.setAttribute('data-value-missing', 'Field is required');
+            customerForm.appendChild(lastNameLabel);
+            customerForm.appendChild(lastName);
 
-        lastNameLabel.setAttribute('for', 'lastName');
-        lastNameLabel.innerHTML = "Last Name";
-        lastName.setAttribute('type', 'text');
-        lastName.setAttribute('name', 'lastName');
-        lastName.setAttribute('id', 'lastName');
-        lastName.setAttribute('required', 'required');
-        lastName.setAttribute('data-value-missing', 'Field is required');
-        customerForm.appendChild(lastNameLabel);
-        customerForm.appendChild(lastName);
+            addressLabel.setAttribute('for', 'address');
+            addressLabel.innerHTML = "Address";
+            address.setAttribute('type', 'text');
+            address.setAttribute('name', 'address');
+            address.setAttribute('id', 'address');
+            address.setAttribute('required', 'required');
+            address.setAttribute('data-value-missing', 'Field is required');
+            customerForm.appendChild(addressLabel);
+            customerForm.appendChild(address);
 
-        addressLabel.setAttribute('for', 'address');
-        addressLabel.innerHTML = "Address";
-        address.setAttribute('type', 'text');
-        address.setAttribute('name', 'address');
-        address.setAttribute('id', 'address');
-        address.setAttribute('required', 'required');
-        address.setAttribute('data-value-missing', 'Field is required');
-        customerForm.appendChild(addressLabel);
-        customerForm.appendChild(address);
+            cityLabel.setAttribute('for', 'city');
+            cityLabel.innerHTML = "City";
+            city.setAttribute('type', 'text');
+            city.setAttribute('name', 'city');
+            city.setAttribute('id', 'city');
+            city.setAttribute('required', 'required');
+            city.setAttribute('data-value-missing', 'Field is required');
+            customerForm.appendChild(cityLabel);
+            customerForm.appendChild(city);
 
-        cityLabel.setAttribute('for', 'city');
-        cityLabel.innerHTML = "City";
-        city.setAttribute('type', 'text');
-        city.setAttribute('name', 'city');
-        city.setAttribute('id', 'city');
-        city.setAttribute('required', 'required');
-        city.setAttribute('data-value-missing', 'Field is required');
-        customerForm.appendChild(cityLabel);
-        customerForm.appendChild(city);
-
-        emailLabel.setAttribute('for', 'email');
-        emailLabel.innerHTML = "Email";
-        email.setAttribute('type', 'email');
-        email.setAttribute('name', 'email');
-        email.setAttribute('id', 'email');
-        email.setAttribute('required', 'required');
-        email.setAttribute('data-value-missing', 'Field is required');
-        customerForm.appendChild(emailLabel);
-        customerForm.appendChild(email);
+            emailLabel.setAttribute('for', 'email');
+            emailLabel.innerHTML = "Email";
+            email.setAttribute('type', 'email');
+            email.setAttribute('name', 'email');
+            email.setAttribute('id', 'email');
+            email.setAttribute('required', 'required');
+            email.setAttribute('data-value-missing', 'Field is required');
+            customerForm.appendChild(emailLabel);
+            customerForm.appendChild(email);
+        }
+        validateForm()
     }
-    validateForm()
-}
 
- //validation for input elements
+    //validation for input elements
 
     const regExName = /^[A-Za-z] {3,32}$/;
     const regExAddress = /^[A-Za-z0-9 ]{7,32}$/;
@@ -283,94 +286,88 @@ let createCustomerForm = () => {
     const validAddress = (value) => value.match(regExAddress);
     const validInput = (value) => notEmpty(value) && longEnough(value);
 
-const validateForm = () => {
-    if (firstName.value === ""){
+    const validateForm = () => {
+        if (firstName.value === "") {
             firstName.style.backgroundColor = 'darkgray';
             firstName.addEventListener('blur', () => {
                 if (!validInput(firstName.value)) {
                     firstName.style.border = "medium red solid";
-                    console.log("field is empty/entry invalid");
-                    } else {
-                            firstName.style.border = "medium green solid";
-                            localStorage.setItem('fName', firstName.value);
-                            console.log(firstName.value);
-                            console.log("entry is valid");
-                        }  
-                    });
+                    return false;
+                } else {
+                    firstName.style.border = "medium green solid";
+                    localStorage.setItem('fName', firstName.value);
+                }
+            });
 
-}
-    if (lastName.value === ""){
-                    lastName.style.backgroundColor = 'darkgray';
-                    lastName.addEventListener('blur', () => {
-                       if (!validInput(lastName.value)) {
-                            lastName.style.border = "medium red solid";
-                            console.log("field is empty");
-                        } else {
-                            lastName.style.border = "medium green solid";
-                            localStorage.setItem('lName', lastName.value);
-                            console.log(lastName.value);
-                            console.log("entry is valid");
-                        } 
-                    });
-}
-    if (address.value === "") {
-                    address.style.backgroundColor = 'darkgray';
-                    address.addEventListener('blur', () => {
-                        if (!validAddress(address.value) && longEnough(address.value)) {
-                            address.style.border = "medium red solid";
-                            console.log("field is empty");
-                        } else {
-                            address.style.border = "medium green solid";
-                            localStorage.setItem('address', address.value);
-                            console.log(address.value);
-                            console.log("entry is valid");
-                        }
-                    });
-}
-    if (city.value === "") {
-                    city.style.backgroundColor = 'darkgray';
-                    city.addEventListener('blur', () => {
-                        if (!validInput(city.value)) {
-                            city.style.border = "medium red solid";
-                            console.log("field is empty");
-                        } else {
-                            city.style.border = "medium green solid";
-                            localStorage.setItem('city', city.value);
-                            console.log(city.value);
-                            console.log("entry is valid");
-                        }
-                    });
-}
-    if (email.value === "") {
+        }
+        if (lastName.value === "") {
+            lastName.style.backgroundColor = 'darkgray';
+            lastName.addEventListener('blur', () => {
+                if (!validInput(lastName.value)) {
+                    lastName.style.border = "medium red solid";
+                    return false;
+                } else {
+                    lastName.style.border = "medium green solid";
+                    localStorage.setItem('lName', lastName.value);
+                }
+            });
+        }
+        if (address.value === "") {
+            address.style.backgroundColor = 'darkgray';
+            address.addEventListener('blur', () => {
+                if (!validAddress(address.value) && !longEnough(address.value) && !notEmpty(address.value)) {
+                    address.style.border = "medium red solid";
+                    return false;
+                } else {
+                    address.style.border = "medium green solid";
+                    localStorage.setItem('address', address.value);
+                }
+            });
+        }
+        if (city.value === "") {
+            city.style.backgroundColor = 'darkgray';
+            city.addEventListener('blur', () => {
+                if (!validInput(city.value)) {
+                    city.style.border = "medium red solid";
+                    return false;
+                } else {
+                    city.style.border = "medium green solid";
+                    localStorage.setItem('city', city.value);
+                }
+            });
+        }
+        if (email.value === "") {
             email.style.backgroundColor = 'darkgray';
             email.addEventListener('input', () => {
-                if (!validEmail(email.value))  {
+                if (!validEmail(email.value)) {
                     email.style.border = "medium red solid";
-                    console.log("field is empty");
+                    return false;
                 } else {
                     email.style.border = "medium green solid";
-                    localStorage.setItem('email', email.value)
-                            console.log(email.value);
-                            console.log("entry is valid");
-                        }
-                    });
-}
-    
-    return orderObject.contact = {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        address: address.value,
-        city: city.value,
-        email: email.value
+                    localStorage.setItem('email', email.value);
+                }
+            });
+        }
+        
+        if (validInput(firstName.value && lastName.value && address.value && city.value && email.value)){
+        return orderObject.contact = {
+            firstName: firstName.value,
+            lastName: lastName.value,
+            address: address.value,
+            city: city.value,
+            email: email.value
+        }
+        } else {
+            return false;
+        }
     }
-}
 
-let submitOrderBtn = document.getElementById('submit-order');
+    let submitOrderBtn = document.getElementById('submit-order');
 
-    submitOrderBtn.addEventListener('click', async ($event) =>{
+    submitOrderBtn.addEventListener('click', async ($event) => {
         $event.preventDefault();
         let inCart = localStorage.getItem('inCart');
-        inCart = JSON.parse(inCart); 
+        inCart = JSON.parse(inCart);
 
         //get items from localStorage
         let cFirstName = localStorage.getItem('fName');
@@ -380,23 +377,19 @@ let submitOrderBtn = document.getElementById('submit-order');
         let cEmail = localStorage.getItem('email');
 
         const validForm = validateForm();
-            if (validForm !== false){
-                Object.values(inCart).map(items => {
-                    orderObject.products.push(items.id);
-                })
-                console.log(orderObject);
-                const response = await order('http://localhost:3000/api/teddies/order', orderObject);
-                console.log(orderObject);
-                console.log(response);
-                let cartTotal = localStorage.getItem('itemTotals');
-                cartTotal = parseInt(cartTotal);
-                sessionStorage.setItem('customerOrder', JSON.stringify(response));
-                location.href = `order.html?id=${response.orderId}&price=${cartTotal}`;
+        
+        if (validForm !== false) {
+            Object.values(inCart).map(items => {
+                orderObject.products.push(items.id);
+            })
+            const response = await order('http://localhost:3000/api/teddies/order', orderObject);
+            let cartTotal = localStorage.getItem('itemTotals');
+            cartTotal = parseInt(cartTotal);
+            sessionStorage.setItem('customerOrder', JSON.stringify(response));
+            location.href = `order.html?id=${response.orderId}&price=${cartTotal}`;
         }
     });
+    loadCart();
     displayCart();
     cartTotal();
 }
-
-loadCart();
-cartTotal();

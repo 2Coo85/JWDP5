@@ -3,9 +3,9 @@ makeRequest = () => {
         const queryString = location.search;
         const urlParameters = new URLSearchParams(queryString);
         const id = urlParameters.get('id');
-        
+
         let apiRequest = new XMLHttpRequest();
-        
+
         apiRequest.open('GET', 'http://localhost:3000/api/teddies/' + id);
         apiRequest.onreadystatechange = () => {
             if (apiRequest.readyState === 4) {
@@ -21,8 +21,8 @@ makeRequest = () => {
 };
 
 createProductBox = (response) => {
-    //get DOM elements
-    
+    //get and create DOM elements
+
     const productBox = document.createElement('Article');
     const teddyName = document.createElement('h3');
     const teddyPrice = document.createElement('p');
@@ -39,52 +39,54 @@ createProductBox = (response) => {
     const asideDiv = document.createElement('div');
     const qtyDropDownLabel = document.createElement('label');
     const qtyDropDown = document.createElement('select');
-
-    productDisplay.appendChild(productBox);
     
+    //set up attributes for elements
+    productDisplay.appendChild(productBox);
+
     mainDiv.classList.add('col-xs-12', 'col-sm-12', 'col-md-6', 'col-lg-6');
     mainDiv.style.textAlign = 'center';
     productBox.appendChild(mainDiv);
-    
+
     image.setAttribute('src', teddyImg);
     image.classList.add('products');
     image.style.width = '225px';
     image.style.marginTop = '20px';
     mainDiv.appendChild(image);
     mainDiv.innerHTML += '<p style="text-align: center">' + response.description + '</p>';
-    
+
     detailDisplay.appendChild(asideDiv);
     asideDiv.classList.add('col-xs-12', 'col-sm-12', 'col-md-6', 'col-lg-6');
     asideDiv.style.marginTop = '20px';
     asideDiv.innerHTML += '<h3>' + response.name + '</h3>';
-    
+
     dropDownLabel.innerHTML = "Choose your color: ";
     teddyColorsDropDown.setAttribute('id', 'colorSelection');
     form.appendChild(dropDownLabel);
     form.appendChild(teddyColorsDropDown);
-    
+
+    //set up drop-down for color choices
     for (let color in response.colors) {
         const selections = document.createElement('option');
         selections.innerHTML = response.colors[color];
         selections.setAttribute('value', response.colors[color]);
         teddyColorsDropDown.appendChild(selections);
     }
-    
+
     asideDiv.innerHTML += '<h5>$' + response.price / 100 + '.00</h5>';
-    
+
     asideDiv.appendChild(form);
-    
+
     addToCartBtn.classList.add('cart-button');
     addToCartBtn.setAttribute('id', 'addToCart');
     addToCartBtn.setAttribute('data-product-id', response._id);
     addToCartBtn.innerHTML = 'Add To Cart';
-    
+
     asideDiv.appendChild(addToCartBtn);
-    
+
     let items = JSON.parse(JSON.stringify(response));
-    
+
     let cartBtn = document.querySelectorAll('.cart-button');
-    //click events
+    //click events for add to cart button
     for (let i = 0; i < cartBtn.length; i++) {
         cartBtn[i].addEventListener('click', () => {
             updateCart(items);
@@ -97,7 +99,7 @@ init = async () => {
     try {
         const requestPromise = makeRequest();
         const response = await requestPromise;
-        
+
         createProductBox(response);
     } catch (error) {
         document.getElementById('productImage-display').innerHTML = '<h2>' + error + '</h2>';
